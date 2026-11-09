@@ -9,8 +9,8 @@
     * { box-sizing: border-box; }
     html, body { min-height: 100%; margin: 0; }
     body { min-height: 100vh; background: #f4efed; color: #2e2a29; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-tap-highlight-color: transparent; }
-    .phone { width: 100%; max-width: 520px; min-height: 100vh; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom)); }
-    .screen[hidden] { display: none; }
+    .phone { width: 100%; max-width: 520px; min-height: 100vh; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 18px max(100px, calc(env(safe-area-inset-bottom) + 88px)); }
+    .screen[hidden], [hidden] { display: none !important; }
     .title { margin: 0; font-size: clamp(26px, 7vw, 32px); line-height: 1.15; letter-spacing: -.06em; }
     .subtitle { margin: 5px 0 16px; color: #6f5d63; font-size: 15px; line-height: 1.4; }
     .card { overflow: hidden; border: 1px solid rgba(120,96,101,.16); border-radius: 24px; background: rgba(255,255,255,.32); box-shadow: 0 10px 24px rgba(96,72,78,.06); }
@@ -24,6 +24,7 @@
     .box { margin: 14px 0; padding: 14px; border: 1px solid #e7dfe0; border-radius: 16px; background: rgba(255,255,255,.6); }
     label { display: block; margin: 12px 0 6px; color: #594b4f; font-size: 14px; font-weight: 600; }
     input, textarea { width: 100%; border: 1px solid #e2d5d8; border-radius: 12px; padding: 12px; background: #fff; color: #382d31; font: inherit; font-size: 16px; }
+    input[type="date"] { min-height: 46px; }
     textarea { min-height: 140px; resize: vertical; }
     .choices { display: grid; gap: 10px; }
     .choice { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px; border: 1px solid #e7dfe0; border-radius: 16px; background: rgba(255,255,255,.55); color: inherit; text-align: left; font: inherit; cursor: pointer; }
@@ -48,6 +49,19 @@
     .garden-flower { display: grid; place-items: center; min-width: 48px; min-height: 58px; border-radius: 50%; background: rgba(255,255,255,.32); font-size: 36px; animation: bloom .45s ease-out both; }
     @keyframes bloom { from { transform: scale(.2) translateY(12px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
     .garden-empty { position: relative; z-index: 1; margin: 4px auto; padding: 10px; border-radius: 12px; background: rgba(255,255,255,.76); color: #5f6e4a; text-align: center; font-size: 14px; }
+    .tabbar { position: fixed; z-index: 10; bottom: 0; left: 50%; display: grid; grid-template-columns: repeat(3, 1fr); width: min(100%, 520px); padding: 8px 12px max(8px, env(safe-area-inset-bottom)); transform: translateX(-50%); border-top: 1px solid #e7dfe0; background: rgba(255,250,249,.96); backdrop-filter: blur(12px); }
+    .tab { min-height: 54px; border: 0; border-radius: 12px; background: transparent; color: #89777b; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .tab[aria-selected="true"] { background: #fff0f2; color: #b65f70; }
+    .tab span { display: block; margin-bottom: 2px; font-size: 20px; }
+    .letter-list { display: grid; gap: 12px; margin-top: 14px; }
+    .letter-item { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; padding: 14px; border: 1px solid #eadfe0; border-radius: 18px; background: rgba(255,255,255,.72); box-shadow: 0 5px 14px rgba(96,72,78,.05); }
+    .bouquet { display: grid; place-items: center; align-self: start; min-height: 74px; border-radius: 16px; background: #fff3f3; font-size: 40px; }
+    .letter-item h3 { margin: 0 0 5px; color: #503c41; font-size: 17px; }
+    .letter-item p { font-size: 14px; white-space: pre-wrap; }
+    .letter-meta { margin-top: 8px; color: #927d82; font-size: 12px; }
+    .empty-state { padding: 25px 16px; border-radius: 16px; background: rgba(255,255,255,.6); color: #806f73; text-align: center; line-height: 1.6; }
+    .danger { background: linear-gradient(180deg, #a95864, #944653); }
+    .setting-actions { display: grid; gap: 8px; }
     @media (max-height: 650px) { .visual img { height: 34vh; min-height: 220px; } .text-box { padding: 14px 16px; } }
   </style>
 </head>
@@ -58,19 +72,37 @@
       <div class="card"><div class="visual"><img src="./IMG_5968.png" alt="분홍 장미 꽃다발" width="613" height="713"></div><div class="text-box"><h2>하루에 한 송이, 마음 한 다발</h2><p>연인과의 추억을 더 따뜻하게 남겨보세요. 꽃 한 송이와 짧은 편지로 마음을 전달할 수 있어요.</p><button class="cta" id="start" type="button">시작하기</button></div></div>
     </section>
     <section class="screen" id="pair" hidden>
-      <button class="back" type="button" data-back="welcome">‹ 처음으로</button>
-      <h1 class="title">커플 연결</h1><p class="subtitle">내 이름을 적고, 연결 코드를 만들거나 입력해요.</p>
+      <button class="back" type="button" data-back="welcome">‹ 처음으로</button><h1 class="title">커플 연결</h1><p class="subtitle">내 이름을 적고, 연결 코드를 만들거나 입력해요.</p>
       <div class="box"><label for="pair-name">내 이름</label><input id="pair-name" maxlength="30" placeholder="이름을 적어주세요"><button class="cta" id="create-code" type="button">코드 만들기</button><button class="copy-button" id="copy-code" type="button" disabled>코드 복사</button><p class="status" id="create-status" aria-live="polite"></p></div>
       <div class="box"><label for="pair-code">상대방의 6자리 코드</label><input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"><button class="cta" id="join-code" type="button">코드로 연결하기</button><p class="status" id="join-status" aria-live="polite"></p></div>
     </section>
     <section class="screen" id="home" hidden>
       <div class="connection-banner" id="connection-banner" aria-live="polite"></div>
-      <h1 class="title">우리의 정원</h1><p class="subtitle">함께 건넨 꽃과 마음이 정원에 피어나요.</p>
-      <div class="garden" aria-label="두 사람이 함께 가꾸는 정원">
-        <div class="garden-sign"><h2 id="garden-sign-name">우리의 정원</h2><div id="garden-name-editor"><label for="garden-name" style="color:#fff7db;margin:8px 0 4px">정원 이름 짓기</label><input id="garden-name" maxlength="40" placeholder="예: 햇살 가득 우리 정원"><button class="sign-save" id="save-garden-name" type="button">팻말에 새기기</button></div></div>
-        <div class="garden-status" id="garden-count">아직 정원에 꽃이 없어요</div><div class="garden-flowers" id="garden-flowers" aria-live="polite"></div><p class="garden-empty" id="garden-empty">첫 번째 꽃을 심어 정원을 가꿔보세요 🌱</p>
-      </div>
-      <button class="cta" id="gift-flower" type="button">꽃 선물하러 가기</button><p class="status" id="garden-status" aria-live="polite"></p>
+      <section id="garden-panel">
+        <h1 class="title">우리의 정원</h1><p class="subtitle">함께 건넨 꽃과 마음이 정원에 피어나요.</p>
+        <div class="garden" aria-label="두 사람이 함께 가꾸는 정원">
+          <div class="garden-sign"><h2 id="garden-sign-name">우리의 정원</h2><div id="garden-name-editor"><label for="garden-name" style="color:#fff7db;margin:8px 0 4px">정원 이름 짓기</label><input id="garden-name" maxlength="40" placeholder="예: 햇살 가득 우리 정원"><button class="sign-save" id="save-garden-name" type="button">팻말에 새기기</button></div></div>
+          <div class="garden-status" id="garden-count">아직 정원에 꽃이 없어요</div><div class="garden-flowers" id="garden-flowers" aria-live="polite"></div><p class="garden-empty" id="garden-empty">첫 번째 꽃을 심어 정원을 가꿔보세요 🌱</p>
+        </div>
+        <button class="cta" id="gift-flower" type="button">꽃 선물하러 가기</button><p class="status" id="garden-status" aria-live="polite"></p>
+      </section>
+      <section id="collection-panel" hidden>
+        <h1 class="title">꽃 모아보기</h1><p class="subtitle">서로에게 건넨 꽃과 편지를 모아봤어요.</p>
+        <div class="letter-list" id="letter-list"></div>
+      </section>
+      <section id="settings-panel" hidden>
+        <h1 class="title">설정</h1><p class="subtitle">우리와 정원에 관한 정보를 바꿔보세요.</p>
+        <div class="box"><h2>내 이름</h2><label for="settings-name">이름 변경</label><input id="settings-name" maxlength="30" placeholder="내 이름"><button class="cta" id="save-name" type="button">이름 저장</button></div>
+        <div class="box"><h2>우리의 정원</h2><label for="settings-garden-name">정원 이름 변경</label><input id="settings-garden-name" maxlength="40" placeholder="정원 이름"><button class="cta" id="save-settings-garden" type="button">정원 이름 저장</button></div>
+        <div class="box"><h2>특별한 날</h2><p class="hint">우리의 기념일을 달력에 기록해요.</p><label for="anniversary">기념일 (년 / 월 / 일)</label><input id="anniversary" type="date"><button class="cta" id="save-anniversary" type="button">기념일 저장</button></div>
+        <div class="box setting-actions"><h2>커플 연결</h2><p>연결을 끊으면 공동 정원과 편지에 더 이상 접근할 수 없어요.</p><button class="cta danger" id="disconnect" type="button">커플 연결 끊기</button></div>
+        <p class="status" id="settings-status" aria-live="polite"></p>
+      </section>
+      <nav class="tabbar" aria-label="하단 메뉴">
+        <button class="tab" type="button" data-tab="garden" aria-selected="true"><span>🌿</span>정원</button>
+        <button class="tab" type="button" data-tab="collection" aria-selected="false"><span>💐</span>꽃 모아보기</button>
+        <button class="tab" type="button" data-tab="settings" aria-selected="false"><span>⚙️</span>설정</button>
+      </nav>
     </section>
     <section class="screen" id="flowers" hidden>
       <button class="back" type="button" data-back="home">‹ 우리 정원</button><h1 class="title">어떤 꽃을 보낼까요?</h1><p class="subtitle">마음을 담을 꽃 한 송이를 골라보세요.</p>
@@ -83,10 +115,10 @@
     </section>
     <section class="screen" id="letter" hidden>
       <button class="back" type="button" data-back="flowers">‹ 꽃 다시 고르기</button><h1 class="title">마음을 적어주세요</h1><p class="subtitle" id="chosen-flower">고른 꽃: 장미 🌹</p>
-      <form id="letter-form"><label for="recipient">받는 사람</label><input id="recipient" name="recipient" autocomplete="name" placeholder="이름을 적어주세요" required><label for="message">메시지</label><textarea id="message" name="message" placeholder="연인에게 전하고 싶은 마음을 적어주세요" required></textarea><p class="hint">마음을 담아 보내는 한 송이, 더 오래 남아요.</p><button class="cta" type="submit">꽃 선물하기</button></form>
+      <form id="letter-form"><label for="recipient">받는 사람</label><input id="recipient" name="recipient" autocomplete="name" placeholder="이름을 적어주세요" required><label for="letter-title">편지 제목</label><input id="letter-title" name="title" maxlength="60" placeholder="예: 오늘도 고마워" required><label for="message">메시지</label><textarea id="message" name="message" maxlength="2000" placeholder="연인에게 전하고 싶은 마음을 적어주세요" required></textarea><p class="hint">마음을 담아 보내는 한 송이, 더 오래 남아요.</p><button class="cta" type="submit">꽃 선물하기</button></form>
     </section>
     <section class="screen" id="preview" hidden>
-      <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" id="back-to-garden" type="button">정원으로 돌아가기</button>
+      <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" id="back-to-garden" type="button">공동의 홈으로</button>
     </section>
   </main>
   <script>
@@ -95,6 +127,8 @@
     let selectedFlower = '장미';
     let currentCode = '';
     let currentNames = [];
+    let memberIndex = 0;
+    let pairState = {};
     let pollTimer;
     let gardenRefreshTimer;
     let copyResetTimer;
@@ -102,18 +136,31 @@
     function setStatus(id, message) { document.getElementById(id).textContent = message; }
     function resetCopyButton() { const button = document.getElementById('copy-code'); button.textContent = '코드 복사'; button.classList.remove('copied'); clearTimeout(copyResetTimer); }
     async function api(path, body, method = 'POST') {
-      const response = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, ...(body ? { body: JSON.stringify(body) } : {}) });
+      const response = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.message || '요청에 실패했어요.');
       return data;
     }
     function showConnectedHome(pair) {
+      pairState = pair;
       currentNames = pair.names || currentNames;
       document.getElementById('connection-banner').textContent = `${currentNames.join(' 💘 ')} 연결 됐어요`;
       renderGarden(pair);
+      document.getElementById('settings-name').value = currentNames[memberIndex] || '';
+      document.getElementById('settings-garden-name').value = pair.gardenName || '';
+      document.getElementById('anniversary').value = pair.anniversary || '';
+      renderLetters(pair.flowers || []);
       showScreen('home');
+      setHomeTab('garden');
       clearInterval(gardenRefreshTimer);
-      gardenRefreshTimer = setInterval(refreshGarden, 4000);
+      gardenRefreshTimer = setInterval(refreshPair, 5000);
+    }
+    function setHomeTab(tab) {
+      document.getElementById('garden-panel').hidden = tab !== 'garden';
+      document.getElementById('collection-panel').hidden = tab !== 'collection';
+      document.getElementById('settings-panel').hidden = tab !== 'settings';
+      document.querySelectorAll('.tab').forEach((button) => button.setAttribute('aria-selected', String(button.dataset.tab === tab)));
+      if (tab === 'collection') renderLetters(pairState.flowers || []);
     }
     function renderGarden(pair) {
       if (pair.names) currentNames = pair.names;
@@ -124,37 +171,60 @@
       const garden = document.getElementById('garden-flowers');
       garden.replaceChildren();
       flowers.forEach((item, index) => {
-        const bloom = document.createElement('span');
-        bloom.className = 'garden-flower'; bloom.textContent = flowerEmoji[item.flower] || '🌸';
-        bloom.setAttribute('role', 'img'); bloom.setAttribute('aria-label', `${item.flower} ${index + 1}번째 꽃`);
-        garden.appendChild(bloom);
+        const bloom = document.createElement('span'); bloom.className = 'garden-flower'; bloom.textContent = flowerEmoji[item.flower] || '🌸';
+        bloom.setAttribute('role', 'img'); bloom.setAttribute('aria-label', `${item.flower} ${index + 1}번째 꽃`); garden.appendChild(bloom);
       });
       document.getElementById('garden-empty').hidden = flowers.length > 0;
       document.getElementById('garden-count').textContent = flowers.length ? `우리 정원에 꽃 ${flowers.length}송이가 피어 있어요 🌷` : '아직 정원에 꽃이 없어요';
     }
-    async function refreshGarden() {
+    function renderLetters(items) {
+      const list = document.getElementById('letter-list'); list.replaceChildren();
+      if (!items.length) {
+        const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = '아직 편지가 없어요. 첫 꽃편지로 우리만의 이야기를 시작해보세요 💌'; list.appendChild(empty); return;
+      }
+      [...items].reverse().forEach((item) => {
+        const row = document.createElement('article'); row.className = 'letter-item';
+        const bouquet = document.createElement('div'); bouquet.className = 'bouquet'; bouquet.setAttribute('aria-label', `${item.flower} 꽃다발`); bouquet.textContent = `💐${flowerEmoji[item.flower] || '🌸'}`;
+        const detail = document.createElement('div');
+        const title = document.createElement('h3'); title.textContent = item.title || `${item.flower} 꽃편지`;
+        const message = document.createElement('p'); message.textContent = item.message || '마음이 담긴 꽃을 선물했어요.';
+        const meta = document.createElement('div'); meta.className = 'letter-meta';
+        const date = item.createdAt ? new Date(item.createdAt).toLocaleDateString('ko-KR') : '';
+        meta.textContent = `${item.sender || '우리'} → ${item.recipient || '연인'} · ${item.flower} ${flowerEmoji[item.flower] || ''}${date ? ` · ${date}` : ''}`;
+        detail.append(title, message, meta); row.append(bouquet, detail); list.appendChild(row);
+      });
+    }
+    async function refreshPair() {
       if (!currentCode) return;
-      try { renderGarden(await api(`/api/pair/${encodeURIComponent(currentCode)}`, null, 'GET')); }
-      catch (error) { clearInterval(gardenRefreshTimer); setStatus('garden-status', error.message); }
+      try {
+        pairState = await api(`/api/pair/${encodeURIComponent(currentCode)}`, undefined, 'GET');
+        currentNames = pairState.names || currentNames;
+        document.getElementById('connection-banner').textContent = `${currentNames.join(' 💘 ')} 연결 됐어요`;
+        renderGarden(pairState); renderLetters(pairState.flowers || []);
+        document.getElementById('settings-name').value = currentNames[memberIndex] || '';
+        document.getElementById('settings-garden-name').value = pairState.gardenName || '';
+        document.getElementById('anniversary').value = pairState.anniversary || '';
+      } catch (error) { clearInterval(gardenRefreshTimer); setStatus('settings-status', error.message); }
     }
     function startPairPolling(code) {
       clearInterval(pollTimer);
       pollTimer = setInterval(async () => {
         try {
-          const pair = await api(`/api/pair/${encodeURIComponent(code)}`, null, 'GET');
-          if (pair.paired) { clearInterval(pollTimer); currentCode = code; showConnectedHome(pair); }
+          const pair = await api(`/api/pair/${encodeURIComponent(code)}`, undefined, 'GET');
+          if (pair.paired) { clearInterval(pollTimer); currentCode = code; memberIndex = 0; showConnectedHome(pair); }
         } catch (error) { clearInterval(pollTimer); setStatus('create-status', error.message); }
       }, 2000);
     }
     document.getElementById('start').addEventListener('click', () => showScreen('pair'));
     document.querySelectorAll('[data-back]').forEach((button) => button.addEventListener('click', () => showScreen(button.dataset.back)));
+    document.querySelectorAll('.tab').forEach((button) => button.addEventListener('click', () => setHomeTab(button.dataset.tab)));
     document.getElementById('create-code').addEventListener('click', async () => {
       const name = document.getElementById('pair-name').value.trim();
       if (!name) { setStatus('create-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
       setStatus('create-status', '코드를 만들고 있어요…'); document.getElementById('copy-code').disabled = true; resetCopyButton();
       try {
-        const data = await api('/api/pair/create', { name });
-        currentCode = data.code; document.getElementById('pair-code').value = data.code; document.getElementById('copy-code').disabled = false;
+        const data = await api('/api/pair/create', { name }); currentCode = data.code; memberIndex = 0;
+        document.getElementById('pair-code').value = data.code; document.getElementById('copy-code').disabled = false;
         setStatus('create-status', `상대방에게 이 코드를 공유하세요: ${data.code} (15분 동안 유효)`); startPairPolling(data.code);
       } catch (error) { setStatus('create-status', error.message); }
     });
@@ -172,17 +242,38 @@
       if (!name) { setStatus('join-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
       if (!/^\d{6}$/.test(code)) { setStatus('join-status', '6자리 숫자 코드를 입력해주세요.'); document.getElementById('pair-code').focus(); return; }
       setStatus('join-status', '연결 중이에요…');
-      try { const pair = await api('/api/pair/join', { code, name }); currentCode = code; clearInterval(pollTimer); showConnectedHome(pair); }
+      try { const pair = await api('/api/pair/join', { code, name }); currentCode = code; memberIndex = pair.memberIndex ?? 1; clearInterval(pollTimer); showConnectedHome(pair); }
       catch (error) { setStatus('join-status', error.message); }
     });
+    async function saveGardenName(name) {
+      if (!name.trim()) throw new Error('정원 이름을 입력해주세요.');
+      pairState = await api(`/api/pair/${encodeURIComponent(currentCode)}/garden`, { name: name.trim() }, 'PUT');
+      renderGarden(pairState); document.getElementById('settings-garden-name').value = pairState.gardenName;
+    }
     document.getElementById('save-garden-name').addEventListener('click', async () => {
-      const name = document.getElementById('garden-name').value.trim();
-      if (!name) { setStatus('garden-status', '정원 이름을 적어주세요.'); document.getElementById('garden-name').focus(); return; }
+      try { await saveGardenName(document.getElementById('garden-name').value); setStatus('garden-status', '정원 이름을 팻말에 새겼어요 🌿'); }
+      catch (error) { setStatus('garden-status', error.message); }
+    });
+    document.getElementById('save-settings-garden').addEventListener('click', async () => {
+      try { await saveGardenName(document.getElementById('settings-garden-name').value); setStatus('settings-status', '우리 정원 이름을 바꿨어요 🌿'); }
+      catch (error) { setStatus('settings-status', error.message); }
+    });
+    document.getElementById('save-name').addEventListener('click', async () => {
+      const name = document.getElementById('settings-name').value.trim();
       try {
-        const result = await api(`/api/pair/${encodeURIComponent(currentCode)}/garden`, { name }, 'PUT');
-        document.getElementById('garden-sign-name').textContent = result.gardenName; document.getElementById('garden-name-editor').hidden = true;
-        setStatus('garden-status', '두 사람의 정원 이름을 팻말에 새겼어요 🌿'); refreshGarden();
-      } catch (error) { setStatus('garden-status', error.message); }
+        pairState = await api(`/api/pair/${encodeURIComponent(currentCode)}/profile`, { name, memberIndex }, 'PUT');
+        currentNames = pairState.names; document.getElementById('connection-banner').textContent = `${currentNames.join(' 💘 ')} 연결 됐어요`;
+        setStatus('settings-status', '이름을 변경했어요.');
+      } catch (error) { setStatus('settings-status', error.message); }
+    });
+    document.getElementById('save-anniversary').addEventListener('click', async () => {
+      try { pairState = await api(`/api/pair/${encodeURIComponent(currentCode)}/anniversary`, { date: document.getElementById('anniversary').value }, 'PUT'); setStatus('settings-status', pairState.anniversary ? '기념일을 저장했어요 💝' : '기념일을 지웠어요.'); }
+      catch (error) { setStatus('settings-status', error.message); }
+    });
+    document.getElementById('disconnect').addEventListener('click', async () => {
+      if (!window.confirm('커플 연결을 끊을까요? 공동 정원과 편지도 함께 사라져요.')) return;
+      try { await api(`/api/pair/${encodeURIComponent(currentCode)}`, undefined, 'DELETE'); clearInterval(gardenRefreshTimer); clearInterval(pollTimer); currentCode = ''; currentNames = []; pairState = {}; showScreen('welcome'); }
+      catch (error) { setStatus('settings-status', error.message); }
     });
     document.getElementById('gift-flower').addEventListener('click', () => showScreen('flowers'));
     document.querySelectorAll('.choice').forEach((button) => button.addEventListener('click', () => {
@@ -195,15 +286,16 @@
       event.preventDefault(); const form = event.currentTarget; if (!form.reportValidity()) return;
       const submit = form.querySelector('[type="submit"]'); submit.disabled = true;
       try {
-        await api(`/api/pair/${encodeURIComponent(currentCode)}/flowers`, { flower: selectedFlower });
+        pairState = await api(`/api/pair/${encodeURIComponent(currentCode)}/flowers`, { flower: selectedFlower, recipient: form.elements.recipient.value, title: form.elements.title.value, message: form.elements.message.value, memberIndex });
+        renderGarden(pairState); renderLetters(pairState.flowers || []);
         document.getElementById('preview-recipient').textContent = `${form.elements.recipient.value}에게`;
         document.getElementById('preview-message').textContent = form.elements.message.value;
-        document.getElementById('preview-flower').textContent = `${selectedFlower} ${flowerEmoji[selectedFlower]} · 꽃말을 담아 보냅니다`;
+        document.getElementById('preview-flower').textContent = `${selectedFlower} ${flowerEmoji[selectedFlower]} · ${form.elements.title.value}`;
         showScreen('preview');
       } catch (error) { setStatus('garden-status', error.message); }
       finally { submit.disabled = false; }
     });
-    document.getElementById('back-to-garden').addEventListener('click', async () => { await refreshGarden(); showScreen('home'); });
+    document.getElementById('back-to-garden').addEventListener('click', async () => { await refreshPair(); showScreen('home'); setHomeTab('garden'); });
   </script>
 </body>
 </html>

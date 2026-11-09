@@ -8,7 +8,7 @@ const PAIR_TTL_MS = 15 * 60 * 1000;
 const pairs = new Map();
 const allowedFlowers = new Set(['장미', '튤립', '해바라기', '데이지']);
 
-app.use(express.json({ limit: '8kb' }));
+app.use(express.json({ limit: '16kb' }));
 app.use(express.static(__dirname, { index: false }));
 
 function cleanExpiredPairs() {
@@ -27,19 +27,17 @@ function getPair(code) {
   return pairs.get(String(code || ''));
 }
 function pairView(pair) {
-  return { code: pair.code, names: pair.names, paired: pair.names.length === 2, gardenName: pair.gardenName, flowers: pair.flowers };
+  return { code: pair.code, names: pair.names, paired: pair.names.length === 2, gardenName: pair.gardenName, anniversary: pair.anniversary, flowers: pair.flowers };
+}
+function memberIndex(req, pair) {
+  const index = Number(req.body?.memberIndex);
+  return Number.isInteger(index) && index >= 0 && index < pair.names.length ? index : -1;
 }
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.post('/api/pair/create', (req, res) => {
   const code = makeCode();
-  pairs.set(code, {
-    code,
-    names: [cleanName(req.body?.name)],
-    gardenName: '',
-    flowers: [],
-    expiresAt: Date.now() + PAIR_TTL_MS
-  });
+  pairs.set(code, { code, names: [cleanName(req.body?.name)], gardenName: '', anniversary: '', flowers: [], expiresAt: Date.now() + PAIR_TTL_MS });
   res.json({ ok: true, code, expiresInSeconds: PAIR_TTL_MS / 1000 });
 });
 app.post('/api/pair/join', (req, res) => {
@@ -49,30 +47,62 @@ app.post('/api/pair/join', (req, res) => {
   if (!pair) return res.status(404).json({ ok: false, message: '코드가 없거나 만료됐어요. 다시 확인해주세요.' });
   if (pair.names.length >= 2) return res.status(409).json({ ok: false, message: '이미 연결된 코드예요.' });
   pair.names.push(cleanName(req.body?.name));
-  res.json({ ok: true, ...pairView(pair) });
+  res.json({ ok: true, ...pairView(pair), memberIndex: 1 });
 });
 app.get('/api/pair/:code', (req, res) => {
   const pair = getPair(req.params.code);
   if (!pair) return res.status(404).json({ ok: false, message: '연결 코드가 만료됐어요. 새 코드를 만들어주세요.' });
   res.json({ ok: true, ...pairView(pair) });
 });
+app.put('/api/pair/:code/profile', (req, res) => {
+  const pair = getPair(req.params.code);
+  if (!pair) return res.status(404).json({ ok: false, message: '연결이 만료됐어요. 다시 연결해주세요.' });
+  const index = memberIndex(req, pair);
+  if (index < 0) return res.status(400).json({ ok: false, message: '이름을 바꿀 수 있는 연결 정보가 없어요. 다시 연결해주세요.' });
+  const name = String(req.body?.name || '').trim();
+  if (!name) return res.status(400).json({ ok: false, message: '이름을 입력해주세요.' });
+  pair.names[index] = cleanName(name);
+  res.json({ ok: true, ...pairView(pair), memberIndex: index });
+});
 app.put('/api/pair/:code/garden', (req, res) => {
   const pair = getPair(req.params.code);
-  if (!pair) return res.status(404).json({ ok: false, message: '연결 코드가 만료됐어요. 다시 연결해주세요.' });
-  if (pair.names.length !== 2) return res.status(409).json({ ok: false, message: '두 사람이 연결된 뒤 정원 이름을 지을 수 있어요.' });
+  if (!pair) return res.status(404).json({ ok: false, message: '연결이 만료됐어요. 다시 연결해주세요.' });
   const name = String(req.body?.name || '').trim().slice(0, 40);
   if (!name) return res.status(400).json({ ok: false, message: '정원 이름을 입력해주세요.' });
   pair.gardenName = name;
-  res.json({ ok: true, gardenName: pair.gardenName });
+  res.json({ ok: true, ...pairView(pair) });
+});
+app.put('/api/pair/:code/anniversary', (req, res) => {
+  const pair = getPair(req.params.code);
+  if (!pair) return res.status(404).json({ ok: false, message: '연결이 만료됐어요. 다시 연결해주세요.' });
+  const date = String(req.body?.date || '').trim();
+  if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return res.status(400).json({ ok: false, message: '기념일을 년·월·일 형식으로 입력해주세요.' });
+  pair.anniversary = date;
+  res.json({ ok: true, ...pairView(pair) });
 });
 app.post('/api/pair/:code/flowers', (req, res) => {
   const pair = getPair(req.params.code);
-  if (!pair) return res.status(404).json({ ok: false, message: '연결 코드가 만료됐어요. 다시 연결해주세요.' });
+  if (!pair) return res.status(404).json({ ok: false, message: '연결이 만료됐어요. 다시 연결해주세요.' });
   if (pair.names.length !== 2) return res.status(409).json({ ok: false, message: '두 사람이 연결된 뒤 꽃을 선물할 수 있어요.' });
   const flower = String(req.body?.flower || '');
   if (!allowedFlowers.has(flower)) return res.status(400).json({ ok: false, message: '꽃을 다시 골라주세요.' });
-  pair.flowers.push({ flower, createdAt: Date.now() });
-  res.json({ ok: true, flowers: pair.flowers });
+  const senderIndex = memberIndex(req, pair);
+  const entry = {
+    flower,
+    title: String(req.body?.title || '').trim().slice(0, 60) || `${flower} 꽃편지`,
+    recipient: String(req.body?.recipient || '').trim().slice(0, 30),
+    message: String(req.body?.message || '').trim().slice(0, 2000),
+    sender: senderIndex >= 0 ? pair.names[senderIndex] : '우리',
+    createdAt: Date.now()
+  };
+  pair.flowers.push(entry);
+  res.json({ ok: true, ...pairView(pair) });
+});
+app.delete('/api/pair/:code', (req, res) => {
+  const pair = getPair(req.params.code);
+  if (!pair) return res.status(404).json({ ok: false, message: '연결을 찾을 수 없어요.' });
+  pairs.delete(pair.code);
+  res.json({ ok: true });
 });
 app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.listen(PORT, () => console.log(`Flower Letter listening on port ${PORT}`));
