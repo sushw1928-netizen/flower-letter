@@ -26,7 +26,7 @@
  배포:
  환경:
  이름: 깃허브 페이지
- URL: ${step.deposition}.출력.page_url }
+ URL: ${step.deposition}.출력.페이지_url }
  런온: 우분투 latest
  단계:
  - 이름.: 체크아웃
