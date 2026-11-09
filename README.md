@@ -1,2 +1,2 @@
-# flower-letter
-Safari-friendly private flower-letter web app for couples
+# 꽃 편지
+커플을 위한 사파리 친화적인 개인 꽃 편지 웹 앱
