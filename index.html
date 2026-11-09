@@ -32,8 +32,9 @@
     .choice strong, .choice small { display: block; }
     .choice small, .hint { margin-top: 3px; color: #806f73; font-size: 13px; }
     .status { min-height: 22px; margin-top: 8px; color: #a0495b; font-size: 14px; }
-    .copy-button { width: 100%; min-height: 46px; margin-top: 8px; border: 1px solid #d9b8bf; border-radius: 12px; background: #fff8f9; color: #8c4e5a; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .copy-button { width: 100%; min-height: 46px; margin-top: 8px; border: 1px solid #d9b8bf; border-radius: 12px; background: #fff8f9; color: #8c4e5a; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
     .copy-button:disabled { opacity: .55; cursor: not-allowed; }
+    .copy-button.copied { border-color: #9ab99e; background: #f1f8f1; color: #3f7047; }
     @media (max-height: 650px) { .visual img { height: 34vh; min-height: 220px; } .text-box { padding: 14px 16px; } }
   </style>
 </head>
@@ -79,7 +80,7 @@
     </section>
 
     <section class="screen" id="preview" hidden>
-      <button class="back" type="button" data-back="letter">‹ 편지 ��정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" type="button" data-back="welcome">처음으로</button>
+      <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" type="button" data-back="welcome">처음으로</button>
     </section>
   </main>
   <script>
@@ -87,8 +88,15 @@
     let selectedFlower = '장미';
     let currentCode = '';
     let pollTimer;
+    let copyResetTimer;
     function showScreen(id) { screens.forEach((screen) => { screen.hidden = screen.id !== id; }); window.scrollTo(0, 0); }
     function setStatus(id, message) { document.getElementById(id).textContent = message; }
+    function resetCopyButton() {
+      const button = document.getElementById('copy-code');
+      button.textContent = '코드 복사';
+      button.classList.remove('copied');
+      clearTimeout(copyResetTimer);
+    }
     async function api(path, body) {
       const response = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await response.json();
@@ -113,6 +121,7 @@
       if (!name) { setStatus('create-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
       setStatus('create-status', '코드를 만들고 있어요…');
       document.getElementById('copy-code').disabled = true;
+      resetCopyButton();
       try {
         const data = await api('/api/pair/create', { name });
         currentCode = data.code;
@@ -133,7 +142,12 @@
           codeInput.select();
           if (!document.execCommand('copy')) throw new Error('copy failed');
         }
+        const button = document.getElementById('copy-code');
+        button.textContent = '복사 완료 ✓';
+        button.classList.add('copied');
         setStatus('create-status', '코드를 복사했어요. 상대방에게 공유해주세요!');
+        clearTimeout(copyResetTimer);
+        copyResetTimer = setTimeout(resetCopyButton, 2500);
       } catch {
         setStatus('create-status', '복사할 수 없어요. 코드를 길게 눌러 복사해주세요.');
       }
@@ -143,7 +157,7 @@
       const code = document.getElementById('pair-code').value.trim();
       if (!name) { setStatus('join-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
       if (!/^\d{6}$/.test(code)) { setStatus('join-status', '6자리 숫자 코드를 입력해주세요.'); document.getElementById('pair-code').focus(); return; }
-      setStatus('join-status', '연결 중이에요…');
+      setStatus('join-status', '연결 중��에요…');
       try {
         const data = await api('/api/pair/join', { code, name });
         currentCode = data.code;
