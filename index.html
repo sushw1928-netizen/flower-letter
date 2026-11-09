@@ -32,7 +32,7 @@
     .choice strong, .choice small { display: block; }
     .choice small, .hint { margin-top: 3px; color: #806f73; font-size: 13px; }
     .status { min-height: 22px; margin-top: 8px; color: #a0495b; font-size: 14px; }
-    .copy-button { width: 100%; min-height: 46px; margin-top: 8px; border: 1px solid #d9b8bf; border-radius: 12px; background: #fff8f9; color: #8c4e5a; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+    .copy-button { width: 100%; min-height: 46px; margin-top: 8px; border: 1px solid #d9b8bf; border-radius: 12px; background: #fff8f9; color: #8c4e5a; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
     .copy-button:disabled { opacity: .55; cursor: not-allowed; }
     .copy-button.copied { border-color: #9ab99e; background: #f1f8f1; color: #3f7047; }
     .connection-banner { margin: 14px 0; padding: 13px 15px; border-radius: 16px; background: #fff6f7; color: #9d5260; text-align: center; font-weight: 700; }
@@ -54,49 +54,24 @@
 <body>
   <main class="phone">
     <section class="screen" id="welcome">
-      <header><h1 class="title">💐 꽃편지</h1><p class="subtitle">꽃을 고르고, 마음을 적어 연인에게 ���내요.</p></header>
+      <header><h1 class="title">💐 꽃편지</h1><p class="subtitle">꽃을 고르고, 마음을 적어 연인에게 보내요.</p></header>
       <div class="card"><div class="visual"><img src="./IMG_5968.png" alt="분홍 장미 꽃다발" width="613" height="713"></div><div class="text-box"><h2>하루에 한 송이, 마음 한 다발</h2><p>연인과의 추억을 더 따뜻하게 남겨보세요. 꽃 한 송이와 짧은 편지로 마음을 전달할 수 있어요.</p><button class="cta" id="start" type="button">시작하기</button></div></div>
     </section>
-
     <section class="screen" id="pair" hidden>
       <button class="back" type="button" data-back="welcome">‹ 처음으로</button>
       <h1 class="title">커플 연결</h1><p class="subtitle">내 이름을 적고, 연결 코드를 만들거나 입력해요.</p>
-      <div class="box">
-        <label for="pair-name">내 이름</label>
-        <input id="pair-name" maxlength="30" placeholder="이름을 적어주세요">
-        <button class="cta" id="create-code" type="button">코드 만들기</button>
-        <button class="copy-button" id="copy-code" type="button" disabled>코드 복사</button>
-        <p class="status" id="create-status" aria-live="polite"></p>
-      </div>
-      <div class="box">
-        <label for="pair-code">상대방의 6자리 코드</label>
-        <input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456">
-        <button class="cta" id="join-code" type="button">코드로 연결하기</button>
-        <p class="status" id="join-status" aria-live="polite"></p>
-      </div>
+      <div class="box"><label for="pair-name">내 이름</label><input id="pair-name" maxlength="30" placeholder="이름을 적어주세요"><button class="cta" id="create-code" type="button">코드 만들기</button><button class="copy-button" id="copy-code" type="button" disabled>코드 복사</button><p class="status" id="create-status" aria-live="polite"></p></div>
+      <div class="box"><label for="pair-code">상대방의 6자리 코드</label><input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"><button class="cta" id="join-code" type="button">코드로 연결하기</button><p class="status" id="join-status" aria-live="polite"></p></div>
     </section>
-
     <section class="screen" id="home" hidden>
       <div class="connection-banner" id="connection-banner" aria-live="polite"></div>
-      <h1 class="title">우리의 정원</h1>
-      <p class="subtitle">함께 건넨 꽃과 마음이 정원에 피어나요.</p>
+      <h1 class="title">우리의 정원</h1><p class="subtitle">함께 건넨 꽃과 마음이 정원에 피어나요.</p>
       <div class="garden" aria-label="두 사람이 함께 가꾸는 정원">
-        <div class="garden-sign">
-          <h2 id="garden-sign-name">우리의 정원</h2>
-          <div id="garden-name-editor">
-            <label for="garden-name" style="color:#fff7db;margin:8px 0 4px">정원 이름 짓기</label>
-            <input id="garden-name" maxlength="40" placeholder="예: 햇살 가득 우리 정원">
-            <button class="sign-save" id="save-garden-name" type="button">팻말에 새기기</button>
-          </div>
-        </div>
-        <div class="garden-status" id="garden-count">아직 정원에 꽃이 없어요</div>
-        <div class="garden-flowers" id="garden-flowers" aria-live="polite"></div>
-        <p class="garden-empty" id="garden-empty">첫 번째 꽃을 심어 정원을 가꿔보세요 🌱</p>
+        <div class="garden-sign"><h2 id="garden-sign-name">우리의 정원</h2><div id="garden-name-editor"><label for="garden-name" style="color:#fff7db;margin:8px 0 4px">정원 이름 짓기</label><input id="garden-name" maxlength="40" placeholder="예: 햇살 가득 우리 정원"><button class="sign-save" id="save-garden-name" type="button">팻말에 새기기</button></div></div>
+        <div class="garden-status" id="garden-count">아직 정원에 꽃이 없어요</div><div class="garden-flowers" id="garden-flowers" aria-live="polite"></div><p class="garden-empty" id="garden-empty">첫 번째 꽃을 심어 정원을 가꿔보세요 🌱</p>
       </div>
-      <button class="cta" id="gift-flower" type="button">꽃 선물하러 가기</button>
-      <p class="status" id="garden-status" aria-live="polite"></p>
+      <button class="cta" id="gift-flower" type="button">꽃 선물하러 가기</button><p class="status" id="garden-status" aria-live="polite"></p>
     </section>
-
     <section class="screen" id="flowers" hidden>
       <button class="back" type="button" data-back="home">‹ 우리 정원</button><h1 class="title">어떤 꽃을 보낼까요?</h1><p class="subtitle">마음을 담을 꽃 한 송이를 골라보세요.</p>
       <div class="choices" role="group" aria-label="꽃 선택">
@@ -104,15 +79,12 @@
         <button class="choice" type="button" aria-pressed="false" data-flower="튤립"><span class="emoji">🌷</span><span><strong>튤립</strong><small>다정한 고백</small></span></button>
         <button class="choice" type="button" aria-pressed="false" data-flower="해바라기"><span class="emoji">🌻</span><span><strong>해바라기</strong><small>한결같은 마음</small></span></button>
         <button class="choice" type="button" aria-pressed="false" data-flower="데이지"><span class="emoji">🌼</span><span><strong>데이지</strong><small>맑고 순수한 마음</small></span></button>
-      </div>
-      <button class="cta" id="to-letter" type="button">이 꽃으로 편지 쓰기</button>
+      </div><button class="cta" id="to-letter" type="button">이 꽃으로 편지 쓰기</button>
     </section>
-
     <section class="screen" id="letter" hidden>
       <button class="back" type="button" data-back="flowers">‹ 꽃 다시 고르기</button><h1 class="title">마음을 적어주세요</h1><p class="subtitle" id="chosen-flower">고른 꽃: 장미 🌹</p>
       <form id="letter-form"><label for="recipient">받는 사람</label><input id="recipient" name="recipient" autocomplete="name" placeholder="이름을 적어주세요" required><label for="message">메시지</label><textarea id="message" name="message" placeholder="연인에게 전하고 싶은 마음을 적어주세요" required></textarea><p class="hint">마음을 담아 보내는 한 송이, 더 오래 남아요.</p><button class="cta" type="submit">꽃 선물하기</button></form>
     </section>
-
     <section class="screen" id="preview" hidden>
       <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" id="back-to-garden" type="button">정원으로 돌아가기</button>
     </section>
@@ -128,12 +100,7 @@
     let copyResetTimer;
     function showScreen(id) { screens.forEach((screen) => { screen.hidden = screen.id !== id; }); window.scrollTo(0, 0); }
     function setStatus(id, message) { document.getElementById(id).textContent = message; }
-    function resetCopyButton() {
-      const button = document.getElementById('copy-code');
-      button.textContent = '코드 복사';
-      button.classList.remove('copied');
-      clearTimeout(copyResetTimer);
-    }
+    function resetCopyButton() { const button = document.getElementById('copy-code'); button.textContent = '코드 복사'; button.classList.remove('copied'); clearTimeout(copyResetTimer); }
     async function api(path, body, method = 'POST') {
       const response = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, ...(body ? { body: JSON.stringify(body) } : {}) });
       const data = await response.json();
@@ -142,8 +109,7 @@
     }
     function showConnectedHome(pair) {
       currentNames = pair.names || currentNames;
-      const namesText = currentNames.join(' 💘 ');
-      document.getElementById('connection-banner').textContent = `${namesText} 됐어요`;
+      document.getElementById('connection-banner').textContent = `${currentNames.join(' 💘 ')} 연결 됐어요`;
       renderGarden(pair);
       showScreen('home');
       clearInterval(gardenRefreshTimer);
@@ -151,8 +117,7 @@
     }
     function renderGarden(pair) {
       if (pair.names) currentNames = pair.names;
-      const label = pair.gardenName || '우리의 정원';
-      document.getElementById('garden-sign-name').textContent = label;
+      document.getElementById('garden-sign-name').textContent = pair.gardenName || '우리의 정원';
       document.getElementById('garden-name').value = pair.gardenName || '';
       document.getElementById('garden-name-editor').hidden = Boolean(pair.gardenName);
       const flowers = pair.flowers || [];
@@ -160,10 +125,8 @@
       garden.replaceChildren();
       flowers.forEach((item, index) => {
         const bloom = document.createElement('span');
-        bloom.className = 'garden-flower';
-        bloom.textContent = flowerEmoji[item.flower] || '🌸';
-        bloom.setAttribute('role', 'img');
-        bloom.setAttribute('aria-label', `${item.flower} ${index + 1}번째 꽃`);
+        bloom.className = 'garden-flower'; bloom.textContent = flowerEmoji[item.flower] || '🌸';
+        bloom.setAttribute('role', 'img'); bloom.setAttribute('aria-label', `${item.flower} ${index + 1}번째 꽃`);
         garden.appendChild(bloom);
       });
       document.getElementById('garden-empty').hidden = flowers.length > 0;
@@ -171,28 +134,16 @@
     }
     async function refreshGarden() {
       if (!currentCode) return;
-      try {
-        const pair = await api(`/api/pair/${encodeURIComponent(currentCode)}`, null, 'GET');
-        renderGarden(pair);
-      } catch (error) {
-        clearInterval(gardenRefreshTimer);
-        setStatus('garden-status', error.message);
-      }
+      try { renderGarden(await api(`/api/pair/${encodeURIComponent(currentCode)}`, null, 'GET')); }
+      catch (error) { clearInterval(gardenRefreshTimer); setStatus('garden-status', error.message); }
     }
     function startPairPolling(code) {
       clearInterval(pollTimer);
       pollTimer = setInterval(async () => {
         try {
           const pair = await api(`/api/pair/${encodeURIComponent(code)}`, null, 'GET');
-          if (pair.paired) {
-            clearInterval(pollTimer);
-            currentCode = code;
-            showConnectedHome(pair);
-          }
-        } catch (error) {
-          clearInterval(pollTimer);
-          setStatus('create-status', error.message);
-        }
+          if (pair.paired) { clearInterval(pollTimer); currentCode = code; showConnectedHome(pair); }
+        } catch (error) { clearInterval(pollTimer); setStatus('create-status', error.message); }
       }, 2000);
     }
     document.getElementById('start').addEventListener('click', () => showScreen('pair'));
@@ -200,58 +151,37 @@
     document.getElementById('create-code').addEventListener('click', async () => {
       const name = document.getElementById('pair-name').value.trim();
       if (!name) { setStatus('create-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
-      setStatus('create-status', '코드를 만들고 있어요…');
-      document.getElementById('copy-code').disabled = true;
-      resetCopyButton();
+      setStatus('create-status', '코드를 만들고 있어요…'); document.getElementById('copy-code').disabled = true; resetCopyButton();
       try {
         const data = await api('/api/pair/create', { name });
-        currentCode = data.code;
-        document.getElementById('pair-code').value = data.code;
-        document.getElementById('copy-code').disabled = false;
-        setStatus('create-status', `상대방에게 이 코드를 공유하세요: ${data.code} (15분 동안 유효)`);
-        startPairPolling(data.code);
+        currentCode = data.code; document.getElementById('pair-code').value = data.code; document.getElementById('copy-code').disabled = false;
+        setStatus('create-status', `상대방에게 이 코드를 공유하세요: ${data.code} (15분 동안 유효)`); startPairPolling(data.code);
       } catch (error) { setStatus('create-status', error.message); }
     });
     document.getElementById('copy-code').addEventListener('click', async () => {
       if (!currentCode) return;
       try {
         if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(currentCode);
-        else {
-          const codeInput = document.getElementById('pair-code');
-          codeInput.focus();
-          codeInput.select();
-          if (!document.execCommand('copy')) throw new Error('copy failed');
-        }
-        const button = document.getElementById('copy-code');
-        button.textContent = '복사 완료 ✓';
-        button.classList.add('copied');
-        setStatus('create-status', '코드를 복사했어요. 상대방에게 공유해주세요!');
-        clearTimeout(copyResetTimer);
-        copyResetTimer = setTimeout(resetCopyButton, 2500);
+        else { const input = document.getElementById('pair-code'); input.focus(); input.select(); if (!document.execCommand('copy')) throw new Error('copy failed'); }
+        const button = document.getElementById('copy-code'); button.textContent = '복사 완료 ✓'; button.classList.add('copied');
+        setStatus('create-status', '코드를 복사했어요. 상대방에게 공유해주세요!'); clearTimeout(copyResetTimer); copyResetTimer = setTimeout(resetCopyButton, 2500);
       } catch { setStatus('create-status', '복사할 수 없어요. 코드를 길게 눌러 복사해주세요.'); }
     });
     document.getElementById('join-code').addEventListener('click', async () => {
-      const name = document.getElementById('pair-name').value.trim();
-      const code = document.getElementById('pair-code').value.trim();
+      const name = document.getElementById('pair-name').value.trim(); const code = document.getElementById('pair-code').value.trim();
       if (!name) { setStatus('join-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
       if (!/^\d{6}$/.test(code)) { setStatus('join-status', '6자리 숫자 코드를 입력해주세요.'); document.getElementById('pair-code').focus(); return; }
       setStatus('join-status', '연결 중이에요…');
-      try {
-        const pair = await api('/api/pair/join', { code, name });
-        currentCode = code;
-        clearInterval(pollTimer);
-        showConnectedHome(pair);
-      } catch (error) { setStatus('join-status', error.message); }
+      try { const pair = await api('/api/pair/join', { code, name }); currentCode = code; clearInterval(pollTimer); showConnectedHome(pair); }
+      catch (error) { setStatus('join-status', error.message); }
     });
     document.getElementById('save-garden-name').addEventListener('click', async () => {
       const name = document.getElementById('garden-name').value.trim();
       if (!name) { setStatus('garden-status', '정원 이름을 적어주세요.'); document.getElementById('garden-name').focus(); return; }
       try {
         const result = await api(`/api/pair/${encodeURIComponent(currentCode)}/garden`, { name }, 'PUT');
-        document.getElementById('garden-sign-name').textContent = result.gardenName;
-        document.getElementById('garden-name-editor').hidden = true;
-        setStatus('garden-status', '두 사람의 정원 이름을 팻말에 새겼어요 🌿');
-        refreshGarden();
+        document.getElementById('garden-sign-name').textContent = result.gardenName; document.getElementById('garden-name-editor').hidden = true;
+        setStatus('garden-status', '두 사람의 정원 이름을 팻말에 새겼어요 🌿'); refreshGarden();
       } catch (error) { setStatus('garden-status', error.message); }
     });
     document.getElementById('gift-flower').addEventListener('click', () => showScreen('flowers'));
@@ -262,25 +192,18 @@
     }));
     document.getElementById('to-letter').addEventListener('click', () => showScreen('letter'));
     document.getElementById('letter-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const form = event.currentTarget;
-      if (!form.reportValidity()) return;
-      const submit = form.querySelector('[type="submit"]');
-      submit.disabled = true;
+      event.preventDefault(); const form = event.currentTarget; if (!form.reportValidity()) return;
+      const submit = form.querySelector('[type="submit"]'); submit.disabled = true;
       try {
         await api(`/api/pair/${encodeURIComponent(currentCode)}/flowers`, { flower: selectedFlower });
         document.getElementById('preview-recipient').textContent = `${form.elements.recipient.value}에게`;
         document.getElementById('preview-message').textContent = form.elements.message.value;
         document.getElementById('preview-flower').textContent = `${selectedFlower} ${flowerEmoji[selectedFlower]} · 꽃말을 담아 보냅니다`;
         showScreen('preview');
-      } catch (error) {
-        setStatus('garden-status', error.message);
-      } finally { submit.disabled = false; }
+      } catch (error) { setStatus('garden-status', error.message); }
+      finally { submit.disabled = false; }
     });
-    document.getElementById('back-to-garden').addEventListener('click', async () => {
-      await refreshGarden();
-      showScreen('home');
-    });
+    document.getElementById('back-to-garden').addEventListener('click', async () => { await refreshGarden(); showScreen('home'); });
   </script>
 </body>
 </html>
