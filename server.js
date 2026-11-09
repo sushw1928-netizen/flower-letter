@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const PAIR_TTL_MS = 15 * 60 * 1000;
 const pairs = new Map();
+const allowedFlowers = new Set(['장미', '튤립', '해바라기', '데이지']);
 
 app.use(express.json({ limit: '8kb' }));
 app.use(express.static(__dirname, { index: false }));
@@ -21,28 +22,57 @@ function makeCode() {
   return code;
 }
 function cleanName(value) { return String(value || '').trim().slice(0, 30) || '연인'; }
+function getPair(code) {
+  cleanExpiredPairs();
+  return pairs.get(String(code || ''));
+}
+function pairView(pair) {
+  return { code: pair.code, names: pair.names, paired: pair.names.length === 2, gardenName: pair.gardenName, flowers: pair.flowers };
+}
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.post('/api/pair/create', (req, res) => {
   const code = makeCode();
-  pairs.set(code, { code, names: [cleanName(req.body?.name)], expiresAt: Date.now() + PAIR_TTL_MS });
+  pairs.set(code, {
+    code,
+    names: [cleanName(req.body?.name)],
+    gardenName: '',
+    flowers: [],
+    expiresAt: Date.now() + PAIR_TTL_MS
+  });
   res.json({ ok: true, code, expiresInSeconds: PAIR_TTL_MS / 1000 });
 });
 app.post('/api/pair/join', (req, res) => {
-  cleanExpiredPairs();
   const code = String(req.body?.code || '').trim();
   if (!/^\d{6}$/.test(code)) return res.status(400).json({ ok: false, message: '6자리 숫자 코드를 입력해주세요.' });
-  const pair = pairs.get(code);
+  const pair = getPair(code);
   if (!pair) return res.status(404).json({ ok: false, message: '코드가 없거나 만료됐어요. 다시 확인해주세요.' });
   if (pair.names.length >= 2) return res.status(409).json({ ok: false, message: '이미 연결된 코드예요.' });
   pair.names.push(cleanName(req.body?.name));
-  res.json({ ok: true, code, names: pair.names });
+  res.json({ ok: true, ...pairView(pair) });
 });
 app.get('/api/pair/:code', (req, res) => {
-  cleanExpiredPairs();
-  const pair = pairs.get(String(req.params.code || ''));
-  if (!pair) return res.status(404).json({ ok: false, message: '코드가 만료됐어요. 새 코드를 만들어주세요.' });
-  res.json({ ok: true, paired: pair.names.length === 2, names: pair.names });
+  const pair = getPair(req.params.code);
+  if (!pair) return res.status(404).json({ ok: false, message: '연결 코드가 만료됐어요. 새 코드를 만들어주세요.' });
+  res.json({ ok: true, ...pairView(pair) });
+});
+app.put('/api/pair/:code/garden', (req, res) => {
+  const pair = getPair(req.params.code);
+  if (!pair) return res.status(404).json({ ok: false, message: '연결 코드가 만료됐어요. 다시 연결해주세요.' });
+  if (pair.names.length !== 2) return res.status(409).json({ ok: false, message: '두 사람이 연결된 뒤 정원 이름을 지을 수 있어요.' });
+  const name = String(req.body?.name || '').trim().slice(0, 40);
+  if (!name) return res.status(400).json({ ok: false, message: '정원 이름을 입력해주세요.' });
+  pair.gardenName = name;
+  res.json({ ok: true, gardenName: pair.gardenName });
+});
+app.post('/api/pair/:code/flowers', (req, res) => {
+  const pair = getPair(req.params.code);
+  if (!pair) return res.status(404).json({ ok: false, message: '연결 코드가 만료됐어요. 다시 연결해주세요.' });
+  if (pair.names.length !== 2) return res.status(409).json({ ok: false, message: '두 사람이 연결된 뒤 꽃을 선물할 수 있어요.' });
+  const flower = String(req.body?.flower || '');
+  if (!allowedFlowers.has(flower)) return res.status(400).json({ ok: false, message: '꽃을 다시 골라주세요.' });
+  pair.flowers.push({ flower, createdAt: Date.now() });
+  res.json({ ok: true, flowers: pair.flowers });
 });
 app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.listen(PORT, () => console.log(`Flower Letter listening on port ${PORT}`));
