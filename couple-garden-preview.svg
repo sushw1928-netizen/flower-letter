@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1600" viewBox="0 0 900 1600" role="img" aria-labelledby="title desc">
+  <title id="title">커플 연결 후 공동 정원 화면 미리보기</title>
+  <desc id="desc">두 사람 연결 완료 문구, 이름을 지을 수 있는 나무 팻말, 함께 받은 꽃이 피어나는 정원, 꽃 선물 버튼과 하단 탭이 있는 모바일 화면</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf4f1"/><stop offset="1" stop-color="#f3e9e5"/></linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9e8ef"/><stop offset=".68" stop-color="#e8f1d8"/><stop offset=".69" stop-color="#a8ce83"/><stop offset="1" stop-color="#78ac62"/></linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c99561"/><stop offset="1" stop-color="#9c693f"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#573c38" flood-opacity=".14"/></filter>
+  </defs>
+  <rect width="900" height="1600" fill="url(#bg)"/>
+  <rect x="42" y="42" width="816" height="1516" rx="54" fill="#fffaf8" stroke="#eadbd8" stroke-width="3" filter="url(#shadow)"/>
+  <text x="94" y="126" font-family="Arial,sans-serif" font-size="35" fill="#6f5d63">💐 꽃편지</text>
+  <rect x="88" y="166" width="724" height="84" rx="24" fill="#fff0f2"/>
+  <text x="450" y="220" text-anchor="middle" font-family="Arial,'Apple SD Gothic Neo',sans-serif" font-size="31" font-weight="700" fill="#9d5260">내 이름 💘 상대 이름 연결 됐어요</text>
+  <text x="92" y="322" font-family="Arial,'Apple SD Gothic Neo',sans-serif" font-size="48" font-weight="700" fill="#302a29">우리의 정원</text>
+  <text x="94" y="371" font-family="Arial,'Apple SD Gothic Neo',sans-serif" font-size="24" fill="#78676b">함께 건넨 꽃과 마음이 정원에 피어나요.</text>
+  <rect x="88" y="415" width="724" height="770" rx="38" fill="url(#sky)" stroke="#b5c998" stroke-width="3"/>
+  <text x="175" y="525" font-family="Arial,sans-serif" font-size="55" opacity=".8">☁️</text>
+  <text x="660" y="555" font-family="Arial,sans-serif" font-size="49" opacity=".8">☁️</text>
+  <rect x="251" y="450" width="398" height="160" rx="18" fill="#704727"/>
+  <rect x="263" y="440" width="374" height="146" rx="14" fill="url(#wood)" stroke="#805431" stroke-width="8"/>
+  <text x="450" y="500" text-anchor="middle" font-family="Georgia,'Apple SD Gothic Neo',serif" font-size="32" font-weight="700" fill="#fff7db">우리의 정원</text>
+  <rect x="310" y="520" width="280" height="44" rx="12" fill="#fff9e9"/>
+  <text x="450" y="549" text-anchor="middle" font-family="Arial,'Apple SD Gothic Neo',sans-serif" font-size="19" fill="#806f73">여기에 정원 이름을 지어요</text>
+  <path d="M432 588h36v65h-36z" fill="#79502e"/>
+  <rect x="143" y="664" width="614" height="72" rx="20" fill="#ffffff" fill-opacity=".85"/>
+  <text x="450" y="711" text-anchor="middle" font-family="Arial,'Apple SD Gothic Neo',sans-serif" font-size="27" font-weight="700" fill="#526447">우리 정원에 꽃 3송이가 피어 있어요 🌷</text>
+  <g font-family="Arial,sans-serif" font-size="78" text-anchor="middle">
+    <text x="280" y="900">🌹</text><text x="450" y="875">🌷</text><text x="620" y="905">🌼</text>
+    <text x="360" y="1050">🌻</text><text x="540" y="1055">🌸</text>
+  </g>
+  <g fill="#f4df9c" opacity=".9"><circle cx="180" cy="850" r="7"/><circle cx="710" cy="990" r="8"/><circle cx="218" cy="1080" r="6"/><circle cx="680" cy="790" r="6"/></g>
+  <rect x="88" y="1215" width="724" height="90" rx="24" fill="#ce7e8d"/>
+  <text x="450" y="1273" text-anchor="middle" font-family="Arial,'Apple SD Gothic Neo',sans-serif" font-size="31" font-weight="700" fill="#fff">꽃 선물하러 가기</text>
+  <rect x="88" y="1344" width="724" height="142" rx="0" fill="#fffaf9"/>
+  <path d="M88 1344h724" stroke="#e7dfe0" stroke-width="3"/>
+  <g font-family="Arial,'Apple SD Gothic Neo',sans-serif" text-anchor="middle">
+    <text x="210" y="1410" font-size="34">🌿</text><text x="210" y="1455" font-size="22" font-weight="700" fill="#b65f70">정원</text>
+    <text x="450" y="1410" font-size="34">💐</text><text x="450" y="1455" font-size="22" fill="#89777b">꽃 모아보기</text>
+    <text x="690" y="1410" font-size="34">⚙️</text><text x="690" y="1455" font-size="22" fill="#89777b">설정</text>
+  </g>
+  <text x="450" y="1520" text-anchor="middle" font-family="Arial,'Apple SD Gothic Neo',sans-serif" font-size="18" fill="#a18c90">※ 이름과 꽃은 실제 연결 정보에 따라 표시됩니다.</text>
+</svg>
