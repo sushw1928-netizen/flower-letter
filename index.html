@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff7f6" />
+  <title>꽃편지 – 마음을 꽃으로 전해요</title>
+  <style>
+    :root {
+      --bg: #fff7f6;
+      --card: #ffffff;
+      --ink: #3a2a2e;
+      --muted: #8a7479;
+      --ac: #e0566f;
+      --acsoft: #ffe3e8;
+      --line: #f2d9dd;
+      --shadow: 0 12px 28px rgba(80, 34, 50, 0.08);
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { margin: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      line-height: 1.55;
+      padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+    }
+    main {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 18px 14px 50px;
+    }
+    h1 { margin: 0; font-size: 26px; }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    .subtitle,
+    .hint,
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .subtitle { margin: 4px 0 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+    .topbar label { flex: 1; }
+    .field-label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input, textarea, button {
+      font: inherit;
+    }
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fffafd;
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 16px;
+    }
+    textarea {
+      min-height: 124px;
+      resize: vertical;
+    }
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .primary {
+      background: var(--ac);
+      color: white;
+    }
+    .secondary {
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .text-button {
+      background: transparent;
+      color: var(--ac);
+      padding: 8px 0;
+      font-weight: 600;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+    .tabs button {
+      flex: 1;
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 10px 8px;
+    }
+    .tabs button.active {
+      background: var(--ac);
+      color: white;
+      border-color: var(--ac);
+    }
+    .notice {
+      border-radius: 12px;
+      background: var(--acsoft);
+      padding: 10px 12px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .bouquet-wrap {
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fffaf9, #fff2f3);
+      min-height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+    .flowers {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 300px;
+      gap: 3px 2px;
+    }
+    .flower-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      font-size: 34px;
+      line-height: 1;
+      background: rgba(255,255,255,0.35);
+      cursor: pointer;
+      border: none;
+    }
+    .empty-box {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .meanings {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .meanings li {
+      margin-top: 4px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .flower-option {
+      background: #fffaf9;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink);
+    }
+    .flower-option .em {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 2px;
+      line-height: 1;
+    }
+    .flower-option strong {
+      display: block;
+      font-size: 12px;
+    }
+    .flower-option small {
+      display: block;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+    .wrap-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .wrap-swatch {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    .wrap-swatch.selected {
+      border-color: var(--ink);
+      transform: scale(1.06);
+    }
+    .full {
+      width: 100%;
+    }
+    .pair-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .code-pill {
+      display: inline-block;
+      padding: 8px 12px;
+      background: var(--acsoft);
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--ac);
+    }
+    .message-item {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .message-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .message-item small {
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .saved-letter {
+      white-space: pre-wrap;
+      background: #fff9fa;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+      color: var(--ink);
+    }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    .muted { color: var(--muted); }
+    @media (min-width: 520px) {
+      .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>💐 꽃편지</h1>
+      <p class="subtitle">꽃을 고르고, 마음을 적어 서로의 하루에 꽃을 선물해요.</p>
+    </header>
+
+    <section class="card">
+      <h2>내 이름</h2>
+      <div class="topbar">
+        <label>
+          <span class="field-label">화면에 표시될 이름</span>
+          <input id="nameInput" type="text" maxlength="20" placeholder="이름을 적어 주세요" />
+        </label>
+        <button id="saveNameBtn" class="secondary">저장</button>
+      </div>
+    </section>
+
+    <div id="notice" class="notice" hidden></div>
+
+    <div id="beforePair" hidden>
+      <section class="card">
+        <h2>1. 커플 코드 만들기</h2>
+        <p class="hint">코드를 만들고 연인에게 보내 주세요.</p>
+        <div class="pair-box">
+          <button id="createCodeBtn" class="primary">코드 만들기</button>
+          <div id="myCodeBox" class="code-pill" hidden></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. 연인의 코드 입력</h2>
+        <input id="joinCodeInput" type="text" maxlength="6" placeholder="예: K7M2QX" style="text-transform: uppercase;" />
+        <div style="margin-top: 10px;">
+          <button id="joinCodeBtn" class="primary full">연결하기</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="afterPair" hidden>
+      <div class="tabs" aria-label="메뉴 탭">
+        <button id="tabCreate" class="active">꽃 만들기</button>
+        <button id="tabInbox">받은 꽃</button>
+      </div>
+
+      <section id="createTab">
+        <section class="card">
+          <h2>내 꽃다발 <span class="small">(최대 9송이)</span></h2>
+          <div id="bouquetArea" class="bouquet-wrap">
+            <div class="empty-box">아래에서 꽃을 골라 보세요</div>
+          </div>
+          <ul id="meanings" class="meanings"></ul>
+          <div class="toolbar">
+            <button id="clearSelectionBtn" class="text-button" hidden>모두 지우기</button>
+          </div>
+          <div class="wrap-row" style="margin-top: 12px;">
+            <span class="field-label" style="margin: 0;">포장지</span>
+            <div id="wrapRow" class="wrap-row"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>꽃 고르기</h2>
+          <div id="flowerGrid" class="grid"></div>
+        </section>
+
+        <section class="card">
+          <h2>편지 쓰기</h2>
+          <textarea id="letterInput" maxlength="1000" placeholder="전하고 싶은 마음을 적어 보세요…"></textarea>
+          <div style="margin-top: 12px;">
+            <button id="sendLetterBtn" class="primary full">💌 보내기</button>
+          </div>
+        </section>
+      </section>
+
+      <section id="inboxTab" hidden>
+        <section class="card">
+          <div class="pair-box">
+            <h2>연인과 연결됨</h2>
+            <div id="activeCode" class="code-pill"></div>
+          </div>
+          <div id="messagesList"></div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getDatabase, ref, set, get, update, remove, onValue, push } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCUSBwLYen1OdovdS5JszVjzs3iP7QFqCU",
+      authDomain: "flower-8e761.firebaseapp.com",
+      databaseURL: "https://flower-8e761-default-rtdb.firebaseio.com",
+      projectId: "flower-8e761",
+      storageBucket: "flower-8e761.firebasestorage.app",
+      messagingSenderId: "815755079679",
+      appId: "1:815755079679:web:c69c42f4de6dd12ef741ca"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const FLOWERS = [
+      ['rose', '🌹', '빨간 장미', '열렬한 사랑'],
+      ['tulip', '🌷', '튤립', '사랑의 고고백'],
+      ['sun', '🌻', '해바라기', '당신만을 바라봐요'],
+      ['cherry', '🌸', '벚꽃', '설렘, 아름다운 마음'],
+      ['daisy', '🌼', '데이지', '순수, 희망'],
+      ['hibis', '🌺', '히비스커스', '섬세한 아름다움'],
+      ['lav', '🪻', '라벤더', '기다림, 평온'],
+      ['lotus', '🪷', '연꽃', '깨끗한 마음'],
+      ['clover', '🍀', '클로버', '행운, 약속'],
+      ['baby', '💮', '안개꽃', '맑은 마음'],
+      ['heather', '💜', '제비꽃', '성실, 작은 행복'],
+      ['lily', '🕊️', '백합', '순결, 변하지 않는 사랑'],
+      ['peony', '🌷', '작약', '수줍음, 부끄러운 사랑'],
+      ['cosmos', '🌺', '코스모스', '순정, 소녀의 마음'],
+      ['daff', '🌼', '수선화', '기다림, 자기 사랑']
+    ];
+
+    const WRAPS = ['#f4a6b5', '#b9d7a8', '#f6d98b', '#b7c4f2'];
+    const state = {
+      uid: null,
+      pairCode: null,
+      myName: localStorage.getItem('flowerLetterName') || '',
+      selected: [],
+      wrap: 0,
+      messages: []
+    };
+
+    const els = {
+      nameInput: document.getElementById('nameInput'),
+      saveNameBtn: document.getElementById('saveNameBtn'),
+      beforePair: document.getElementById('beforePair'),
+      afterPair: document.getElementById('afterPair'),
+      createCodeBtn: document.getElementById('createCodeBtn'),
+      joinCodeBtn: document.getElementById('joinCodeBtn'),
+      joinCodeInput: document.getElementById('joinCodeInput'),
+      myCodeBox: document.getElementById('myCodeBox'),
+      notice: document.getElementById('notice'),
+      bouquetArea: document.getElementById('bouquetArea'),
+      meanings: document.getElementById('meanings'),
+      clearSelectionBtn: document.getElementById('clearSelectionBtn'),
+      wrapRow: document.getElementById('wrapRow'),
+      flowerGrid: document.getElementById('flowerGrid'),
+      letterInput: document.getElementById('letterInput'),
+      sendLetterBtn: document.getElementById('sendLetterBtn'),
+      tabCreate: document.getElementById('tabCreate'),
+      tabInbox: document.getElementById('tabInbox'),
+      createTab: document.getElementById('createTab'),
+      inboxTab: document.getElementById('inboxTab'),
+      messagesList: document.getElementById('messagesList'),
+      activeCode: document.getElementById('activeCode')
+    };
+
+    function showNotice(text, ms = 2600) {
+      els.notice.textContent = text;
+      els.notice.hidden = false;
+      clearTimeout(showNotice.timeout);
+      showNotice.timeout = setTimeout(() => {
+        els.notice.hidden = true;
+      }, ms);
+    }
+
+    function codeGen() {
+      const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+      let out = '';
+      for (let i = 0; i < 6; i++) out += chars[Math.floor(Math.random() * chars.length)];
+      return out;
+    }
+
+    function saveName() {
+      const name = els.nameInput.value.trim();
+      state.myName = name.slice(0, 20);
+      localStorage.setItem('flowerLetterName', state.myName);
+      if (state.uid && state.pairCode) {
+        set(ref(db, `pairs/${state.pairCode}/members/${state.uid}`), {
+          name: state.myName,
+          updatedAt: Date.now()
+        });
+      }
+      showNotice('이름을 저장했어요.');
+    }
+
+    function renderWraps() {
+      els.wrapRow.innerHTML = '';
+      WRAPS.forEach((c, index) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'wrap-swatch' + (state.wrap === index ? ' selected' : '');
+        b.style.background = c;
+        b.title = `포장지 ${index + 1}`;
+        b.onclick = () => { state.wrap = index; renderWraps(); };
+        els.wrapRow.appendChild(b);
+      });
+    }
+
+    function renderFlowerOptions() {
+      els.flowerGrid.innerHTML = '';
+      FLOWERS.forEach(([id, emoji, name, lang]) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'flower-option';
+        btn.innerHTML = `<span class="em">${emoji}</span><strong>${name}</strong><small>${lang}</small>`;
+        btn.onclick = () => {
+          if (state.selected.length >= 9) {
+            showNotice('꽃은 최대 9송이까지 고를 수 있어요.');
+            return;
+          }
+          state.selected.push(id);
+          renderBouquet();
+        };
+        els.flowerGrid.appendChild(btn);
+      });
+    }
+
+    function renderBouquet() {
+      els.bouquetArea.innerHTML = '';
+      if (!state.selected.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-box';
+        empty.textContent = '아래에서 꽃을 골라 보세요';
+        els.bouquetArea.appendChild(empty);
+      } else {
+        const container = document.createElement('div');
+        container.className = 'flowers';
+
+        state.selected.forEach((id, index) => {
+          const flower = FLOWERS.find(([fid]) => fid === id);
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'flower-chip';
+          chip.title = '빼기';
+          chip.textContent = flower ? flower[1] : '🌼';
+          chip.onclick = () => {
+            state.selected.splice(index, 1);
+            renderBouquet();
+          };
+          container.appendChild(chip);
+        });
+        els.bouquetArea.appendChild(container);
+      }
+
+      els.meanings.innerHTML = '';
+      const seen = new Set();
+      state.selected.forEach((id) => {
+        if (seen.has(id)) return;
+        seen.add(id);
+        const flower = FLOWERS.find(([fid]) => fid === id);
+        if (!flower) return;
+        const li = document.createElement('li');
+        li.textContent = `${flower[2]} – ${flower[3]}`;
+        els.meanings.appendChild(li);
+      });
+
+      els.clearSelectionBtn.hidden = !state.selected.length;
+    }
+
+    function renderInbox() {
+      const list = els.messagesList;
+      list.innerHTML = '';
+
+      if (!state.messages.length) {
+        const empty = document.createElement('div');
+        empty.className = 'small';
+        empty.textContent = '아직 받은 꽃이 없어요 🌱';
+        list.appendChild(empty);
+        return;
+      }
+
+      state.messages
+        .slice()
+        .sort((a, b) => (b.ts || 0) - (a.ts || 0))
+        .forEach((msg) => {
+          const item = document.createElement('div');
+          item.className = 'message-item';
+
+          const top = document.createElement('strong');
+          top.textContent = `${msg.fromName || '익명'}님의 꽃편지`;
+
+          const meta = document.createElement('small');
+          meta.textContent = new Date(msg.ts).toLocaleString('ko-KR') + ' · ' + (msg.flowers || []).map((fid) => {
+            const f = FLOWERS.find(([k]) => k === fid);
+            return f ? f[2] : '';
+          }).filter(Boolean).join(', ');
+
+          const bouquet = document.createElement('div');
+          bouquet.className = 'flowers';
+          (msg.flowers || []).forEach((fid) => {
+            const flower = FLOWERS.find(([k]) => k === fid);
+            if (!flower) return;
+            const chip = document.createElement('span');
+            chip.className = 'flower-chip';
+            chip.style.cursor = 'default';
+            chip.textContent = flower[1];
+            bouquet.appendChild(chip);
+          });
+
+          const letter = document.createElement('div');
+          letter.className = 'saved-letter';
+          letter.textContent = msg.text || '(편지 내용 없음)';
+
+          item.append(top, meta, bouquet, letter);
+          list.appendChild(item);
+        });
+    }
+
+    function setTabs(tab) {
+      const createOn = tab === 'create';
+      els.tabCreate.classList.toggle('active', createOn);
+      els.tabInbox.classList.toggle('active', !createOn);
+      els.createTab.hidden = !createOn;
+      els.inboxTab.hidden = createOn;
+    }
+
+    els.tabCreate.onclick = () => setTabs('create');
+    els.tabInbox.onclick = () => setTabs('inbox');
+
+    els.saveNameBtn.onclick = saveName;
+    els.nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveName();
+    });
+
+    els.clearSelectionBtn.onclick = () => {
+      state.selected = [];
+      renderBouquet();
+    };
+
+    els.createCodeBtn.onclick = async () => {
+      if (!state.uid) return;
+      let code = codeGen();
+      while (true) {
+        const snapshot = await get(ref(db, `pairs/${code}`));
+        if (!snapshot.exists()) break;
+        code = codeGen();
+      }
+
+      state.pairCode = code;
+      const pairRef = ref(db, `pairs/${code}`);
+      await set(pairRef, {
+        code,
+        members: {
+          [state.uid]: { name: state.myName || '나', joinedAt: Date.now() }
+        },
+        createdAt: Date.now()
+      });
+      await set(ref(db, `users/${state.uid}/pairCode`), code);
+      updatePairUI();
+      showNotice('커플 코드를 만들었어요. 연인에게 공유해 주세요.');
+    };
+
+    els.joinCodeBtn.onclick = async () => {
+      if (!state.uid) return;
+      const code = (els.joinCodeInput.value || '').trim().toUpperCase();
+      if (!/^[A-Z0-9]{6}$/.test(code)) {
+        showNotice('코드는 6자 영문/숫자로 입력해 주세요.');
+        return;
+      }
+
+      const pairSnap = await get(ref(db, `pairs/${code}`));
+      if (!pairSnap.exists()) {
+        showNotice('존재하지 않는 코드예요. 다시 확인해 주세요.');
+        return;
+      }
+
+      const data = pairSnap.val() || {};
+      const members = data.members || {};
+      if (Object.keys(members).length >= 2 && !members[state.uid]) {
+        showNotice('이미 두 사람이 연결된 코드예요.');
+        return;
+      }
+
+      state.pairCode = code;
+      members[state.uid] = { name: state.myName || '나', joinedAt: Date.now() };
+      await set(ref(db, `pairs/${code}/members`), members);
+      await set(ref(db, `users/${state.uid}/pairCode`), code);
+      updatePairUI();
+      showNotice('연인과 연결됐어요 💗');
+    };
+
+    els.sendLetterBtn.onclick = async () => {
+      if (!state.pairCode) {
+        showNotice('먼저 커플 코드를 연결해 주세요.');
+        return;
+      }
+      if (!state.selected.length) {
+        showNotice('꽃을 한 송이 이상 골라 주세요.');
+        return;
+      }
+      if (!state.uid) {
+        showNotice('로그인 준비 중입니다. 잠시만 기다려 주세요.');
+        return;
+      }
+
+      const text = document.getElementById('letterInput').value.trim();
+      const msg = {
+        id: `${Date.now()}`,
+        fromUid: state.uid,
+        fromName: state.myName || '익명',
+        flowers: state.selected.slice(),
+        wrap: state.wrap,
+        text,
+        ts: Date.now()
+      };
+
+      const listRef = ref(db, `pairs/${state.pairCode}/messages`);
+      await push(listRef, msg);
+      state.selected = [];
+      document.getElementById('letterInput').value = '';
+      renderBouquet();
+      showNotice('편지를 보냈어요.');
+    };
+
+    function updatePairUI() {
+      const hasPair = !!state.pairCode;
+      els.beforePair.hidden = hasPair;
+      els.afterPair.hidden = !hasPair;
+      els.activeCode.textContent = state.pairCode || '';
+      if (state.pairCode) {
+        els.myCodeBox.textContent = state.pairCode;
+        els.myCodeBox.hidden = false;
+      } else {
+        els.myCodeBox.hidden = true;
+      }
+      setTabs('create');
+      renderBouquet();
+      renderWraps();
+      renderFlowerOptions();
+    }
+
+    async function loadPairFromUser() {
+      const uid = state.uid;
+      if (!uid) return;
+      const userPairSnap = await get(ref(db, `users/${uid}/pairCode`));
+      if (userPairSnap.exists()) {
+        state.pairCode = userPairSnap.val();
+      }
+      if (state.pairCode) {
+        const pairSnap = await get(ref(db, `pairs/${state.pairCode}`));
+        if (pairSnap.exists()) {
+          state.messages = Object.values(pairSnap.val().messages || {});
+          updatePairUI();
+          const pairRef = ref(db, `pairs/${state.pairCode}/messages`);
+          onValue(pairRef, (snapshot) => {
+            const val = snapshot.val() || {};
+            state.messages = Object.values(val);
+            renderInbox();
+          });
+        }
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        await signInAnonymously(auth);
+        return;
+      }
+      state.uid = user.uid;
+      els.nameInput.value = state.myName;
+      await loadPairFromUser();
+      updatePairUI();
+      renderInbox();
+    });
+
+    renderWraps();
+    renderFlowerOptions();
+    renderBouquet();
+    updatePairUI();
+  </script>
+</body>
+</html>
