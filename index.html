@@ -39,18 +39,28 @@
   <main class="phone">
     <section class="screen" id="welcome">
       <header><h1 class="title">💐 꽃편지</h1><p class="subtitle">꽃을 고르고, 마음을 적어 연인에게 보내요.</p></header>
-      <div class="card"><div class="visual"><img src="./IMG_5968.png" alt="분홍 장미 꽃다발" width="613" height="713"></div><div class="text-box"><h2>하루에 한 송이, 마음 한 다발</h2><p>서로 연결하고, 오늘의 마음을 꽃으로 전해보세요.</p><button class="cta" id="start" type="button">시작하기</button></div></div>
+      <div class="card"><div class="visual"><img src="./IMG_5968.png" alt="분홍 장미 꽃다발" width="613" height="713"></div><div class="text-box"><h2>하루에 한 송이, 마음 한 다발</h2><p>연인과의 추억을 더 따뜻하게 남겨보세요. 꽃 한 송이와 짧은 편지로 마음을 전달할 수 있어요.</p><button class="cta" id="start" type="button">시작하기</button></div></div>
     </section>
 
     <section class="screen" id="pair" hidden>
       <button class="back" type="button" data-back="welcome">‹ 처음으로</button>
-      <h1 class="title">커플 연결</h1><p class="subtitle">한 사람이 코드를 만들고, 상대방이 같은 코드를 입력해요.</p>
-      <div class="box"><label for="creator-name">내 이름</label><input id="creator-name" maxlength="30" placeholder="이름을 적어주세요"><button class="cta" id="create-code" type="button">연결 코드 만들기</button><p class="status" id="create-status" aria-live="polite"></p></div>
-      <div class="box"><label for="join-name">내 이름</label><input id="join-name" maxlength="30" placeholder="이름을 적어주세요"><label for="pair-code">상대방의 6자리 코드</label><input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"><button class="cta" id="join-code" type="button">코드로 연결하기</button><p class="status" id="join-status" aria-live="polite"></p></div>
+      <h1 class="title">커플 연결</h1><p class="subtitle">내 이름을 적고, 연결 코드를 만들거나 입력해요.</p>
+      <div class="box">
+        <label for="pair-name">내 이름</label>
+        <input id="pair-name" maxlength="30" placeholder="이름을 적어주세요">
+        <button class="cta" id="create-code" type="button">코드 만들기</button>
+        <p class="status" id="create-status" aria-live="polite"></p>
+      </div>
+      <div class="box">
+        <label for="pair-code">상대방의 6자리 코드</label>
+        <input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456">
+        <button class="cta" id="join-code" type="button">코드로 연결하기</button>
+        <p class="status" id="join-status" aria-live="polite"></p>
+      </div>
     </section>
 
     <section class="screen" id="flowers" hidden>
-      <button class="back" type="button" data-back="pair">‹ 커플 연결</button><h1 class="title">어떤 꽃을 보낼까요?</h1><p class="subtitle">마음을 담을 꽃 한 송이를 골라주세요.</p>
+      <button class="back" type="button" data-back="pair">‹ 커플 연결</button><h1 class="title">어떤 꽃을 보낼까요?</h1><p class="subtitle">마음을 담을 꽃 한 송이를 골라보세요.</p>
       <div class="choices" role="group" aria-label="꽃 선택">
         <button class="choice" type="button" aria-pressed="true" data-flower="장미"><span class="emoji">🌹</span><span><strong>장미</strong><small>사랑과 열정</small></span></button>
         <button class="choice" type="button" aria-pressed="false" data-flower="튤립"><span class="emoji">🌷</span><span><strong>튤립</strong><small>다정한 고백</small></span></button>
@@ -62,11 +72,11 @@
 
     <section class="screen" id="letter" hidden>
       <button class="back" type="button" data-back="flowers">‹ 꽃 다시 고르기</button><h1 class="title">마음을 적어주세요</h1><p class="subtitle" id="chosen-flower">고른 꽃: 장미 🌹</p>
-      <form id="letter-form"><label for="recipient">받는 사람</label><input id="recipient" name="recipient" autocomplete="name" placeholder="이름을 적어주세요" required><label for="message">편지 내용</label><textarea id="message" name="message" placeholder="오늘 전하고 싶은 마음을 적어보세요." required></textarea><p class="hint">미리보기는 이 기기에서만 볼 수 있어요.</p><button class="cta" type="submit">편지 미리보기</button></form>
+      <form id="letter-form"><label for="recipient">받는 사람</label><input id="recipient" name="recipient" autocomplete="name" placeholder="이름을 적어주세요" required><label for="message">메시지</label><textarea id="message" name="message" placeholder="연인에게 전하고 싶은 마음을 적어주세요" required></textarea><p class="hint">마음을 담아 보내는 한 송이, 더 오래 남아요.</p><button class="cta" type="submit">미리보기</button></form>
     </section>
 
     <section class="screen" id="preview" hidden>
-      <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space:pre-wrap"></p></div><button class="cta" type="button" data-back="welcome">처음 화면으로</button>
+      <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" type="button" data-back="welcome">처음으로</button>
     </section>
   </main>
   <script>
@@ -96,18 +106,25 @@
     document.getElementById('start').addEventListener('click', () => showScreen('pair'));
     document.querySelectorAll('[data-back]').forEach((button) => button.addEventListener('click', () => showScreen(button.dataset.back)));
     document.getElementById('create-code').addEventListener('click', async () => {
+      const name = document.getElementById('pair-name').value.trim();
+      if (!name) { setStatus('create-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
       setStatus('create-status', '코드를 만들고 있어요…');
       try {
-        const data = await api('/api/pair/create', { name: document.getElementById('creator-name').value });
+        const data = await api('/api/pair/create', { name });
         currentCode = data.code;
+        document.getElementById('pair-code').value = data.code;
         setStatus('create-status', `상대방에게 이 코드를 공유하세요: ${data.code} (15분 동안 유효)`);
         startPairPolling(data.code);
       } catch (error) { setStatus('create-status', error.message); }
     });
     document.getElementById('join-code').addEventListener('click', async () => {
+      const name = document.getElementById('pair-name').value.trim();
+      const code = document.getElementById('pair-code').value.trim();
+      if (!name) { setStatus('join-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
+      if (!/^\d{6}$/.test(code)) { setStatus('join-status', '6자리 숫자 코드를 입력해주세요.'); document.getElementById('pair-code').focus(); return; }
       setStatus('join-status', '연결 중이에요…');
       try {
-        const data = await api('/api/pair/join', { code: document.getElementById('pair-code').value, name: document.getElementById('join-name').value });
+        const data = await api('/api/pair/join', { code, name });
         currentCode = data.code;
         clearInterval(pollTimer);
         setStatus('join-status', '연결됐어요! 꽃을 골라보세요.');
