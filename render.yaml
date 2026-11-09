@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: flower-letter
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
