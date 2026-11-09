@@ -32,6 +32,8 @@
     .choice strong, .choice small { display: block; }
     .choice small, .hint { margin-top: 3px; color: #806f73; font-size: 13px; }
     .status { min-height: 22px; margin-top: 8px; color: #a0495b; font-size: 14px; }
+    .copy-button { width: 100%; min-height: 46px; margin-top: 8px; border: 1px solid #d9b8bf; border-radius: 12px; background: #fff8f9; color: #8c4e5a; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .copy-button:disabled { opacity: .55; cursor: not-allowed; }
     @media (max-height: 650px) { .visual img { height: 34vh; min-height: 220px; } .text-box { padding: 14px 16px; } }
   </style>
 </head>
@@ -49,6 +51,7 @@
         <label for="pair-name">내 이름</label>
         <input id="pair-name" maxlength="30" placeholder="이름을 적어주세요">
         <button class="cta" id="create-code" type="button">코드 만들기</button>
+        <button class="copy-button" id="copy-code" type="button" disabled>코드 복사</button>
         <p class="status" id="create-status" aria-live="polite"></p>
       </div>
       <div class="box">
@@ -76,7 +79,7 @@
     </section>
 
     <section class="screen" id="preview" hidden>
-      <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" type="button" data-back="welcome">처음으로</button>
+      <button class="back" type="button" data-back="letter">‹ 편지 ��정하기</button><h1 class="title">마음이 담긴 꽃편지 💌</h1><p class="subtitle" id="preview-flower"></p><div class="card text-box"><h2 id="preview-recipient"></h2><p id="preview-message" style="white-space: pre-wrap;"></p></div><button class="cta" type="button" data-back="welcome">처음으로</button>
     </section>
   </main>
   <script>
@@ -109,13 +112,31 @@
       const name = document.getElementById('pair-name').value.trim();
       if (!name) { setStatus('create-status', '이름을 적어주세요.'); document.getElementById('pair-name').focus(); return; }
       setStatus('create-status', '코드를 만들고 있어요…');
+      document.getElementById('copy-code').disabled = true;
       try {
         const data = await api('/api/pair/create', { name });
         currentCode = data.code;
         document.getElementById('pair-code').value = data.code;
+        document.getElementById('copy-code').disabled = false;
         setStatus('create-status', `상대방에게 이 코드를 공유하세요: ${data.code} (15분 동안 유효)`);
         startPairPolling(data.code);
       } catch (error) { setStatus('create-status', error.message); }
+    });
+    document.getElementById('copy-code').addEventListener('click', async () => {
+      if (!currentCode) return;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(currentCode);
+        } else {
+          const codeInput = document.getElementById('pair-code');
+          codeInput.focus();
+          codeInput.select();
+          if (!document.execCommand('copy')) throw new Error('copy failed');
+        }
+        setStatus('create-status', '코드를 복사했어요. 상대방에게 공유해주세요!');
+      } catch {
+        setStatus('create-status', '복사할 수 없어요. 코드를 길게 눌러 복사해주세요.');
+      }
     });
     document.getElementById('join-code').addEventListener('click', async () => {
       const name = document.getElementById('pair-name').value.trim();
