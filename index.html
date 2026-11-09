@@ -3,59 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#fff8f7">
+  <meta name="theme-color" content="#f4efed">
   <title>꽃편지</title>
   <style>
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
+    html, body { min-height: 100%; margin: 0; }
     body {
       min-height: 100vh;
-      min-height: 100svh;
-      padding: max(8px, env(safe-area-inset-top)) 12px max(8px, env(safe-area-inset-bottom));
-      color: #382d31;
-      background: #fff8f7;
+      background: #f4efed;
+      color: #2e2a29;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
-    main { width: min(100%, 520px); margin: 0 auto; }
-    header { margin: 0 0 8px; }
-    h1 { margin: 0; font-size: clamp(21px, 5.2vw, 28px); line-height: 1.15; letter-spacing: -.05em; }
-    .subtitle { margin: 3px 0 0; color: #927f83; font-size: clamp(13px, 3.4vw, 16px); line-height: 1.3; }
-    .card { overflow: hidden; border: 1px solid #efd9dc; border-radius: 18px; background: #fff; }
-    .bouquet {
-      display: block;
+    .phone {
       width: 100%;
-      height: clamp(180px, 31svh, 280px);
-      object-fit: contain;
-      object-position: center;
-      background: #fff;
+      max-width: 520px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 22px 20px 30px;
     }
-    .copy { padding: 9px 14px 12px; text-align: center; }
-    h2 { margin: 0 0 5px; font-size: clamp(18px, 4.6vw, 23px); line-height: 1.2; letter-spacing: -.05em; }
-    .lead { margin: 0; font-size: clamp(14px, 3.5vw, 17px); line-height: 1.35; word-break: keep-all; }
-    .description { margin: 7px 0 9px; color: #927f83; font-size: clamp(12px, 3.1vw, 14px); line-height: 1.35; word-break: keep-all; }
-    button { width: 100%; min-height: 44px; border: 0; border-radius: 14px; background: #cf5f73; color: #fff; font: inherit; font-size: 18px; font-weight: 700; }
-    @media (max-height: 700px) {
-      body { padding-top: max(5px, env(safe-area-inset-top)); padding-bottom: max(5px, env(safe-area-inset-bottom)); }
-      .bouquet { height: 27svh; min-height: 150px; }
-      .description { margin: 5px 0 7px; }
-      button { min-height: 40px; }
+    .title { margin: 0; font-size: 32px; line-height: 1.2; letter-spacing: -.06em; }
+    .subtitle { margin: 7px 0 20px; color: #6f5d63; font-size: 17px; line-height: 1.5; }
+    .card { overflow: hidden; border: 1px solid rgba(120,96,101,.16); border-radius: 24px; background: rgba(255,255,255,.32); box-shadow: 0 10px 24px rgba(96,72,78,.06); }
+    .visual { display: grid; place-items: center; min-height: 320px; background: linear-gradient(#f2eeeb, #efe8e6); }
+    .visual img { display: block; width: 100%; height: clamp(320px, 48vh, 480px); object-fit: contain; }
+    .text-box { padding: 24px 20px 22px; }
+    h2 { margin: 0 0 14px; font-size: 29px; line-height: 1.35; letter-spacing: -.06em; }
+    .desc { margin: 0; color: #5f5557; font-size: 18px; line-height: 1.7; letter-spacing: -.02em; word-break: keep-all; }
+    .desc + .desc { margin-top: 12px; }
+    .cta { width: 100%; min-height: 60px; margin-top: 22px; border: 0; border-radius: 17px; background: linear-gradient(180deg, #d38a96, #cc7887); color: #fff; font: inherit; font-size: 24px; font-weight: 700; letter-spacing: -.04em; box-shadow: 0 10px 20px rgba(201,118,134,.2); }
+    @media (min-width: 600px) {
+      body { padding: 20px 0; }
+      .phone { min-height: 0; border-radius: 24px; box-shadow: 0 10px 30px rgba(98,78,83,.08); }
+    }
+    @media (max-width: 360px) {
+      .phone { padding-right: 16px; padding-left: 16px; }
+      .visual img { height: 40vh; min-height: 260px; }
+      h2 { font-size: 26px; }
+      .desc { font-size: 17px; }
     }
   </style>
 </head>
 <body>
-  <main>
+  <main class="phone">
     <header>
-      <h1>💐 꽃편지</h1>
+      <h1 class="title">💐 꽃편지</h1>
       <p class="subtitle">꽃을 고르고, 마음을 적어 연인에게 보내요.</p>
     </header>
     <section class="card" aria-label="꽃편지 소개">
-      <img class="bouquet" src="./IMG_5968.png?v=2" alt="분홍 장미 꽃다발">
-      <div class="copy">
+      <div class="visual">
+        <img src="./IMG_5968.png" alt="분홍 장미 꽃다발" width="613" height="713" fetchpriority="high">
+      </div>
+      <div class="text-box">
         <h2>하루에 한 송이, 마음 한 다발</h2>
-        <p class="lead">매일매일 꽃다발과 마음을 전할 수 있으면 좋겠다는 바람에서 시작됐습니다.</p>
-        <p class="description">꽃을 고르고, 꽃말에 마음을 담아 편지를 쓰고, 사진도 함께 넣어 연인에게 보내 보세요. 특별한 날이 아니어도 괜찮아요. 오늘 하루를 꽃 한 다발로 건네봐요.</p>
-        <button type="button">시작하기</button>
+        <p class="desc">매일매일 꽃다발과 마음을 전할 수 있으면 좋겠다는 바람에서 시작했습니다.</p>
+        <p class="desc">꽃을 고르고, 꽃말에 마음을 담아 편지를 쓰고, 사진도 함께 보내요. 특별한 날이 아니어도 괜찮아요. 오늘 하루를 꽃 한 다발로 건네봐요.</p>
+        <button class="cta" type="button">시작하기</button>
       </div>
     </section>
   </main>
