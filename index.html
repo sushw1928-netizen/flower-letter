@@ -11,37 +11,35 @@
     body {
       min-height: 100vh;
       min-height: 100svh;
-      padding: max(12px, env(safe-area-inset-top)) 14px max(12px, env(safe-area-inset-bottom));
+      padding: max(8px, env(safe-area-inset-top)) 12px max(8px, env(safe-area-inset-bottom));
       color: #382d31;
       background: #fff8f7;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
       -webkit-font-smoothing: antialiased;
     }
-    main { width: min(100%, 560px); margin: 0 auto; }
-    header { margin: 2px 0 12px; }
-    h1 { margin: 0; font-size: clamp(24px, 6vw, 32px); line-height: 1.2; letter-spacing: -.05em; }
-    .subtitle { margin: 5px 0 0; color: #927f83; font-size: clamp(14px, 3.8vw, 18px); line-height: 1.4; }
-    .card { overflow: hidden; border: 1px solid #efd9dc; border-radius: 20px; background: #fff; }
+    main { width: min(100%, 520px); margin: 0 auto; }
+    header { margin: 0 0 8px; }
+    h1 { margin: 0; font-size: clamp(21px, 5.2vw, 28px); line-height: 1.15; letter-spacing: -.05em; }
+    .subtitle { margin: 3px 0 0; color: #927f83; font-size: clamp(13px, 3.4vw, 16px); line-height: 1.3; }
+    .card { overflow: hidden; border: 1px solid #efd9dc; border-radius: 18px; background: #fff; }
     .bouquet {
       display: block;
       width: 100%;
-      height: clamp(230px, 40svh, 390px);
+      height: clamp(180px, 31svh, 280px);
       object-fit: contain;
       object-position: center;
       background: #fff;
     }
-    .copy { padding: 12px 16px 16px; text-align: center; }
-    h2 { margin: 0 0 8px; font-size: clamp(20px, 5.2vw, 27px); line-height: 1.25; letter-spacing: -.05em; }
-    .lead { margin: 0; font-size: clamp(15px, 3.8vw, 18px); line-height: 1.5; word-break: keep-all; }
-    .description { margin: 10px 0 12px; color: #927f83; font-size: clamp(13px, 3.4vw, 16px); line-height: 1.5; word-break: keep-all; }
-    button { width: 100%; min-height: 52px; border: 0; border-radius: 16px; background: #cf5f73; color: #fff; font: inherit; font-size: 20px; font-weight: 700; }
-    @media (max-height: 740px) {
-      body { padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: max(8px, env(safe-area-inset-bottom)); }
-      header { margin-bottom: 8px; }
-      .bouquet { height: 34svh; min-height: 190px; }
-      .copy { padding: 9px 14px 12px; }
-      .description { margin: 7px 0 9px; }
-      button { min-height: 46px; }
+    .copy { padding: 9px 14px 12px; text-align: center; }
+    h2 { margin: 0 0 5px; font-size: clamp(18px, 4.6vw, 23px); line-height: 1.2; letter-spacing: -.05em; }
+    .lead { margin: 0; font-size: clamp(14px, 3.5vw, 17px); line-height: 1.35; word-break: keep-all; }
+    .description { margin: 7px 0 9px; color: #927f83; font-size: clamp(12px, 3.1vw, 14px); line-height: 1.35; word-break: keep-all; }
+    button { width: 100%; min-height: 44px; border: 0; border-radius: 14px; background: #cf5f73; color: #fff; font: inherit; font-size: 18px; font-weight: 700; }
+    @media (max-height: 700px) {
+      body { padding-top: max(5px, env(safe-area-inset-top)); padding-bottom: max(5px, env(safe-area-inset-bottom)); }
+      .bouquet { height: 27svh; min-height: 150px; }
+      .description { margin: 5px 0 7px; }
+      button { min-height: 40px; }
     }
   </style>
 </head>
@@ -52,7 +50,7 @@
       <p class="subtitle">꽃을 고르고, 마음을 적어 연인에게 보내요.</p>
     </header>
     <section class="card" aria-label="꽃편지 소개">
-      <img class="bouquet" src="/flower-letter/IMG_5968.png" alt="분홍 장미 꽃다발">
+      <img class="bouquet" src="./IMG_5968.png?v=2" alt="분홍 장미 꽃다발">
       <div class="copy">
         <h2>하루에 한 송이, 마음 한 다발</h2>
         <p class="lead">매일매일 꽃다발과 마음을 전할 수 있으면 좋겠다는 바람에서 시작됐습니다.</p>
