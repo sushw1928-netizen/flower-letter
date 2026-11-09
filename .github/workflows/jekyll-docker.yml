@@ -1,0 +1,20 @@
+이름: 지킬 사이트 CI
+
+위에:
+ 푸시:
+ 나뭇가지: [ "메인" ]
+ pull_request:
+ 나뭇가지: [ "메인" ]
+
+직업:
+ 빌드:
+
+ 실행 중: 우분투-latest
+
+ 단계:
+ - 용도: actions/checkout@v4
+ - 이름: 지킬/빌더 컨테이너에 사이트 구축
+ 달려.: |
+ 도커 실행
+ -v ${github}.작업 공간 }):/srv/jekyl -v ${github}.작업 공간 }}/_site:/srv/jekyl/_site \\
+ 지킬/빌더: 최신 /bin/bash -c "chmod -R 777 /srv/jekyll & & jekyll 빌드 --미래"
