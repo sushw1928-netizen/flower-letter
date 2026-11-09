@@ -8,100 +8,119 @@
   <style>
     * { box-sizing: border-box; }
     html, body { min-height: 100%; margin: 0; }
-    body {
-      min-height: 100vh;
-      background: #f4efed;
-      color: #2e2a29;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .phone {
-      width: 100%;
-      max-width: 520px;
-      height: 100vh;
-      height: 100svh;
-      min-height: 520px;
-      margin: 0 auto;
-      padding: max(12px, env(safe-area-inset-top)) 18px max(14px, env(safe-area-inset-bottom));
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    body { min-height: 100vh; background: #f4efed; color: #2e2a29; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-tap-highlight-color: transparent; }
+    .phone { width: 100%; max-width: 520px; min-height: 100vh; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom)); }
+    .screen[hidden] { display: none; }
     .title { margin: 0; font-size: clamp(26px, 7vw, 32px); line-height: 1.15; letter-spacing: -.06em; }
-    .subtitle { margin: 4px 0 0; color: #6f5d63; font-size: 15px; line-height: 1.4; }
-    .card {
-      min-height: 0;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border: 1px solid rgba(120,96,101,.16);
-      border-radius: 24px;
-      background: rgba(255,255,255,.32);
-      box-shadow: 0 10px 24px rgba(96,72,78,.06);
-    }
-    .visual {
-      min-height: 0;
-      flex: 1 1 0;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(#f2eeeb, #efe8e6);
-    }
-    .visual img { display: block; width: 100%; height: 100%; object-fit: contain; }
-    .text-box { flex: 0 0 auto; padding: 18px 18px max(16px, env(safe-area-inset-bottom)); }
+    .subtitle { margin: 5px 0 16px; color: #6f5d63; font-size: 15px; line-height: 1.4; }
+    .card { overflow: hidden; border: 1px solid rgba(120,96,101,.16); border-radius: 24px; background: rgba(255,255,255,.32); box-shadow: 0 10px 24px rgba(96,72,78,.06); }
+    .visual { display: grid; place-items: center; min-height: 260px; background: linear-gradient(#f2eeeb, #efe8e6); }
+    .visual img { display: block; width: 100%; height: clamp(280px, 43vh, 430px); object-fit: contain; }
+    .text-box { padding: 20px 18px; }
     h2 { margin: 0 0 9px; font-size: clamp(22px, 6vw, 28px); line-height: 1.25; letter-spacing: -.06em; }
-    .desc { margin: 0; color: #5f5557; font-size: clamp(15px, 4vw, 17px); line-height: 1.5; letter-spacing: -.025em; word-break: keep-all; }
-    .desc + .desc { margin-top: 8px; }
-    .cta {
-      width: 100%;
-      min-height: 54px;
-      margin-top: 16px;
-      border: 0;
-      border-radius: 16px;
-      background: linear-gradient(180deg, #d38a96, #cc7887);
-      color: #fff;
-      font: inherit;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -.04em;
-      box-shadow: 0 10px 20px rgba(201,118,134,.2);
-    }
-    @media (max-height: 650px) {
-      .phone { gap: 8px; padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: max(8px, env(safe-area-inset-bottom)); }
-      .text-box { padding: 12px 16px max(12px, env(safe-area-inset-bottom)); }
-      h2 { margin-bottom: 6px; font-size: 22px; }
-      .desc { font-size: 14px; line-height: 1.4; }
-      .desc + .desc { margin-top: 5px; }
-      .cta { min-height: 46px; margin-top: 10px; font-size: 20px; }
-    }
-    @media (min-width: 600px) {
-      body { padding: 20px 0; }
-      .phone { height: min(900px, calc(100vh - 40px)); min-height: 620px; border-radius: 24px; box-shadow: 0 10px 30px rgba(98,78,83,.08); }
-    }
-    @media (max-width: 360px) {
-      .phone { padding-right: 14px; padding-left: 14px; }
-      .text-box { padding-right: 14px; padding-left: 14px; }
-      .desc { font-size: 14px; }
-    }
+    p { margin: 0; color: #5f5557; font-size: 16px; line-height: 1.55; word-break: keep-all; }
+    .cta { width: 100%; min-height: 54px; margin-top: 16px; border: 0; border-radius: 16px; background: linear-gradient(180deg, #d38a96, #cc7887); color: #fff; font: inherit; font-size: 21px; font-weight: 700; letter-spacing: -.04em; box-shadow: 0 10px 20px rgba(201,118,134,.2); cursor: pointer; }
+    .back { margin: 0 0 12px; padding: 8px 0; border: 0; background: transparent; color: #7b6269; font: inherit; font-size: 15px; cursor: pointer; }
+    .choices { display: grid; gap: 10px; }
+    .choice { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px; border: 1px solid #e7dfe0; border-radius: 16px; background: rgba(255,255,255,.55); color: inherit; text-align: left; font: inherit; cursor: pointer; }
+    .choice[aria-pressed="true"] { border: 2px solid #cf7181; background: #fff6f7; }
+    .emoji { font-size: 30px; }
+    .choice strong { display: block; font-size: 17px; }
+    .choice small { display: block; margin-top: 2px; color: #806f73; font-size: 13px; }
+    label { display: block; margin: 14px 0 6px; color: #594b4f; font-size: 14px; font-weight: 600; }
+    input, textarea { width: 100%; border: 1px solid #e2d5d8; border-radius: 12px; padding: 12px; background: #fff; color: #382d31; font: inherit; font-size: 16px; }
+    textarea { min-height: 150px; resize: vertical; }
+    .hint { margin-top: 8px; color: #88777b; font-size: 13px; }
+    .status { min-height: 22px; margin-top: 8px; color: #a0495b; font-size: 14px; }
+    @media (max-height: 650px) { .visual img { height: 34vh; min-height: 220px; } .text-box { padding: 14px 16px; } }
   </style>
 </head>
 <body>
   <main class="phone">
-    <header>
-      <h1 class="title">💐 꽃편지</h1>
-      <p class="subtitle">꽃을 고르고, 마음을 적어 연인에게 보내요.</p>
-    </header>
-    <section class="card" aria-label="꽃편지 소개">
-      <div class="visual">
-        <img src="./IMG_5968.png" alt="분홍 장미 꽃다발" width="613" height="713" fetchpriority="high">
-      </div>
-      <div class="text-box">
-        <h2>하루에 한 송이, 마음 한 다발</h2>
-        <p class="desc">매일매일 꽃다발과 마음을 전할 수 있으면 좋겠다는 바람에서 시작했습니다.</p>
-        <p class="desc">꽃을 고르고, 꽃말에 마음을 담아 편지를 쓰고, 사진도 함께 보내요. 특별한 날이 아니어도 괜찮아요. 오늘 하루를 꽃 한 다발로 건네봐요.</p>
-        <button class="cta" type="button">시작하기</button>
+    <section class="screen" id="welcome">
+      <header>
+        <h1 class="title">💐 꽃편지</h1>
+        <p class="subtitle">꽃을 고르고, 마음을 적어 연인에게 보내요.</p>
+      </header>
+      <div class="card">
+        <div class="visual"><img src="./IMG_5968.png" alt="분홍 장미 꽃다발" width="613" height="713" fetchpriority="high"></div>
+        <div class="text-box">
+          <h2>하루에 한 송이, 마음 한 다발</h2>
+          <p>매일매일 꽃다발과 마음을 전할 수 있으면 좋겠다는 바람에서 시작했습니다. 꽃을 고르고, 꽃말에 마음을 담아 편지를 써 보세요.</p>
+          <button class="cta" id="start" type="button">시작하기</button>
+        </div>
       </div>
     </section>
+
+    <section class="screen" id="flowers" hidden>
+      <button class="back" type="button" data-back="welcome">‹ 처음으로</button>
+      <h1 class="title">어떤 꽃을 보���까요?</h1>
+      <p class="subtitle">마음을 담을 꽃 한 송이를 골라주세요.</p>
+      <div class="choices" role="group" aria-label="꽃 선택">
+        <button class="choice" type="button" aria-pressed="true" data-flower="장미"><span class="emoji">🌹</span><span><strong>장미</strong><small>사랑과 열정</small></span></button>
+        <button class="choice" type="button" aria-pressed="false" data-flower="튤립"><span class="emoji">🌷</span><span><strong>튤립</strong><small>다정한 고백</small></span></button>
+        <button class="choice" type="button" aria-pressed="false" data-flower="해바라기"><span class="emoji">🌻</span><span><strong>해바라기</strong><small>한결같은 마음</small></span></button>
+        <button class="choice" type="button" aria-pressed="false" data-flower="데이지"><span class="emoji">🌼</span><span><strong>데이지</strong><small>맑고 순수한 마음</small></span></button>
+      </div>
+      <button class="cta" id="to-letter" type="button">편지 쓰기</button>
+    </section>
+
+    <section class="screen" id="letter" hidden>
+      <button class="back" type="button" data-back="flowers">‹ 꽃 다시 고르기</button>
+      <h1 class="title">마음을 적어주세요</h1>
+      <p class="subtitle" id="chosen-flower">고른 꽃: 장미 🌹</p>
+      <form id="letter-form">
+        <label for="recipient">받는 사람</label>
+        <input id="recipient" name="recipient" autocomplete="name" placeholder="이름을 적어주세요" required>
+        <label for="message">편지 내용</label>
+        <textarea id="message" name="message" placeholder="오늘 전하고 싶은 마음을 적어보세요." required></textarea>
+        <p class="hint">작성한 편지는 이 화면에서 미리 볼 수 있어요.</p>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <button class="cta" type="submit">편지 미리보기</button>
+      </form>
+    </section>
+
+    <section class="screen" id="preview" hidden>
+      <button class="back" type="button" data-back="letter">‹ 편지 수정하기</button>
+      <h1 class="title">마음이 담긴 꽃편지 💌</h1>
+      <p class="subtitle" id="preview-flower"></p>
+      <div class="card text-box">
+        <h2 id="preview-recipient"></h2>
+        <p id="preview-message" style="white-space: pre-wrap"></p>
+      </div>
+      <button class="cta" type="button" data-back="welcome">처음 화면으로</button>
+    </section>
   </main>
+  <script>
+    const screens = document.querySelectorAll('.screen');
+    let selectedFlower = '장미';
+    function showScreen(id) {
+      screens.forEach((screen) => { screen.hidden = screen.id !== id; });
+      window.scrollTo(0, 0);
+    }
+    document.getElementById('start').addEventListener('click', () => showScreen('flowers'));
+    document.querySelectorAll('[data-back]').forEach((button) => {
+      button.addEventListener('click', () => showScreen(button.dataset.back));
+    });
+    document.querySelectorAll('.choice').forEach((button) => {
+      button.addEventListener('click', () => {
+        selectedFlower = button.dataset.flower;
+        document.querySelectorAll('.choice').forEach((choice) => choice.setAttribute('aria-pressed', String(choice === button)));
+        const emoji = button.querySelector('.emoji').textContent;
+        document.getElementById('chosen-flower').textContent = `고른 꽃: ${selectedFlower} ${emoji}`;
+        document.getElementById('preview-flower').textContent = `${selectedFlower} ${emoji} · 꽃말을 담아 보냅니다`;
+      });
+    });
+    document.getElementById('to-letter').addEventListener('click', () => showScreen('letter'));
+    document.getElementById('letter-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      if (!form.reportValidity()) return;
+      document.getElementById('preview-recipient').textContent = `${form.elements.recipient.value}에게`;
+      document.getElementById('preview-message').textContent = form.elements.message.value;
+      document.getElementById('preview-flower').textContent = `${selectedFlower} ${document.querySelector(`[data-flower="${selectedFlower}"] .emoji`).textContent} · 꽃말을 담아 보냅니다`;
+      showScreen('preview');
+    });
+  </script>
 </body>
 </html>
