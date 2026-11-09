@@ -34,10 +34,10 @@
  - 이름.: 설정 페이지
  용도: 작업/구성-페이지@v5
  - 이름: 아티팩트 업로드
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+ 용도: actions/upload-pages-artifact@v3
+ 와 함께:
+          # 전체 저장소 업로드
+ 경로.: '.'
+ - 이름: GitHub 페이지에 배포
+ ID: 배포
+ 용도: actions/deploy-pages@v5
