@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff8f1">
+  <meta name="description" content="꽃처럼 피어난 마음을 담은 편지">
+  <title>꽃 편지</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #503c43;
+      --muted: #8d7278;
+      --rose: #d7788e;
+      --paper: #fffdf9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: max(24px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: radial-gradient(ellipse at 50% 10%, #fff 0, #fff8f1 48%, #f8e9e5 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    main { width: min(100%, 520px); text-align: center; }
+    .card {
+      padding: clamp(30px, 8vw, 58px) clamp(22px, 7vw, 54px);
+      border: 1px solid rgba(215, 120, 142, .18);
+      border-radius: 28px;
+      background: rgba(255, 253, 249, .88);
+      box-shadow: 0 22px 70px rgba(111, 69, 78, .12);
+    }
+    .flower { margin: 0 0 16px; font-size: 58px; line-height: 1.15; }
+    .eyebrow { margin: 0 0 10px; color: var(--rose); font-size: 12px; font-weight: 700; letter-spacing: .2em; }
+    h1 { margin: 0; font-size: clamp(27px, 7vw, 38px); letter-spacing: -.05em; }
+    .intro { margin: 14px 0 28px; color: var(--muted); line-height: 1.8; word-break: keep-all; }
+    button {
+      min-height: 50px;
+      padding: 0 25px;
+      border: 0;
+      border-radius: 999px;
+      color: white;
+      background: var(--rose);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-appearance: none;
+      touch-action: manipulation;
+      box-shadow: 0 8px 18px rgba(215, 120, 142, .25);
+    }
+    button:focus-visible { outline: 3px solid #9b5064; outline-offset: 4px; }
+    button:active { transform: translateY(1px); }
+    .letter {
+      margin-top: 26px;
+      padding: 22px 20px;
+      border-radius: 18px;
+      background: #fff6f2;
+      text-align: left;
+      line-height: 1.95;
+      white-space: pre-line;
+      word-break: keep-all;
+    }
+    [hidden] { display: none !important; }
+    .signoff { margin: 14px 0 0; color: var(--rose); font-weight: 700; text-align: right; }
+    footer { margin-top: 20px; color: #a68e91; font-size: 12px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .card { animation: rise .7s ease-out both; }
+      @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card" aria-labelledby="title">
+      <p class="flower" aria-hidden="true">💐</p>
+      <p class="eyebrow">A LITTLE NOTE FOR YOU</p>
+      <h1 id="title">꽃처럼 피어난 마음</h1>
+      <p class="intro">전하고 싶은 마음을 한 송이 꽃과 함께 담았어요.</p>
+      <button id="open-letter" type="button" aria-expanded="false" aria-controls="letter">편지 열어보기</button>
+      <div id="letter" class="letter" hidden>
+        네가 있는 하루는 작은 꽃들이 피어난 정원 같아.
+        언제나 지금처럼 환하게 웃을 수 있기를 바라.
+        오늘도 네 마음에 따뜻한 봄이 머물기를!
+        <p class="signoff">늘 응원하며 🌷</p>
+      </div>
+    </section>
+    <footer>마음을 담아, 꽃 편지</footer>
+  </main>
+
+  <script>
+    (function () {
+      var button = document.getElementById('open-letter');
+      var letter = document.getElementById('letter');
+
+      button.addEventListener('click', function () {
+        var isHidden = letter.hidden;
+        letter.hidden = !isHidden;
+        button.setAttribute('aria-expanded', String(isHidden));
+        button.textContent = isHidden ? '편지 닫기' : '편지 열어보기';
+      });
+    }());
+  </script>
+</body>
+</html>
