@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs/promises');
 const { randomInt } = require('crypto');
 
 const app = express();
@@ -7,13 +8,16 @@ const PORT = process.env.PORT || 3000;
 const PAIR_TTL_MS = 15 * 60 * 1000;
 const pairs = new Map();
 const allowedFlowers = new Set(['장미', '튤립', '해바라기', '데이지']);
+const pairStorageKey = 'flower-letter-active-pair-v1';
 
 app.use(express.json({ limit: '16kb' }));
 app.use(express.static(__dirname, { index: false }));
 
 function cleanExpiredPairs() {
   const now = Date.now();
-  for (const [code, pair] of pairs) if (pair.expiresAt <= now) pairs.delete(code);
+  for (const [code, pair] of pairs) {
+    if (pair.names.length < 2 && pair.expiresAt <= now) pairs.delete(code);
+  }
 }
 function makeCode() {
   cleanExpiredPairs();
@@ -26,9 +30,7 @@ function getPair(code) {
   cleanExpiredPairs();
   return pairs.get(String(code || ''));
 }
-function pairView(pair) {
-  return { code: pair.code, names: pair.names, paired: pair.names.length === 2, gardenName: pair.gardenName, anniversary: pair.anniversary, flowers: pair.flowers };
-}
+function pairView(pair) { return { code: pair.code, names: pair.names, paired: pair.names.length === 2, gardenName: pair.gardenName, anniversary: pair.anniversary, flowers: pair.flowers }; }
 function memberIndex(req, pair) {
   const index = Number(req.body?.memberIndex);
   return Number.isInteger(index) && index >= 0 && index < pair.names.length ? index : -1;
@@ -93,6 +95,7 @@ app.post('/api/pair/:code/flowers', (req, res) => {
     recipient: String(req.body?.recipient || '').trim().slice(0, 30),
     message: String(req.body?.message || '').trim().slice(0, 2000),
     sender: senderIndex >= 0 ? pair.names[senderIndex] : '우리',
+    senderIndex,
     createdAt: Date.now()
   };
   pair.flowers.push(entry);
@@ -104,5 +107,57 @@ app.delete('/api/pair/:code', (req, res) => {
   pairs.delete(pair.code);
   res.json({ ok: true });
 });
-app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+
+const persistenceScript = `
+<script>
+(() => {
+  const storageKey = ${JSON.stringify(pairStorageKey)};
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = async (input, init = {}) => {
+    const method = (init.method || (typeof input !== 'string' && input.method) || 'GET').toUpperCase();
+    const url = typeof input === 'string' ? input : input.url;
+    const response = await nativeFetch(input, init);
+    if (method === 'DELETE' && /\/api\/pair\//.test(url) && response.ok) {
+      localStorage.removeItem(storageKey);
+    }
+    if ((method === 'POST') && /\/api\/pair\/(create|join)$/.test(url) && response.ok) {
+      try {
+        const data = await response.clone().json();
+        if (data.code) {
+          const memberIndex = /\/api\/pair\/join$/.test(url) ? 1 : 0;
+          localStorage.setItem(storageKey, JSON.stringify({ code: data.code, memberIndex }));
+        }
+      } catch {}
+    }
+    return response;
+  };
+
+  async function restorePair() {
+    let saved;
+    try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch { localStorage.removeItem(storageKey); }
+    if (!saved || !saved.code) return;
+    try {
+      const pair = await api('/api/pair/' + encodeURIComponent(saved.code), undefined, 'GET');
+      currentCode = saved.code;
+      memberIndex = typeof saved.memberIndex === 'number' ? saved.memberIndex : 0;
+      if (pair.paired) showConnectedHome(pair);
+      else { showScreen('pair'); setStatus('create-status', '연결 코드를 다시 확인하고 있어요…'); startPairPolling(saved.code); }
+    } catch {
+      localStorage.removeItem(storageKey);
+    }
+  }
+
+  window.addEventListener('load', restorePair);
+})();
+</script>`;
+
+app.get('*', async (_req, res, next) => {
+  try {
+    let html = await fs.readFile(path.join(__dirname, 'index.html'), 'utf8');
+    html = html.replace('아직 편지가 없어요. 첫 꽃편지로 우리만의 이야기를 시작해보세요 💌', '아직 받은 꽃이 없어요');
+    html = html.replace('</body>', `${persistenceScript}</body>`);
+    res.type('html').send(html);
+  } catch (error) { next(error); }
+});
+
 app.listen(PORT, () => console.log(`Flower Letter listening on port ${PORT}`));
