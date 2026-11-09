@@ -30,7 +30,16 @@ function getPair(code) {
   cleanExpiredPairs();
   return pairs.get(String(code || ''));
 }
-function pairView(pair) { return { code: pair.code, names: pair.names, paired: pair.names.length === 2, gardenName: pair.gardenName, anniversary: pair.anniversary, flowers: pair.flowers }; }
+function pairView(pair) {
+  return {
+    code: pair.code,
+    names: pair.names,
+    paired: pair.names.length === 2,
+    gardenName: pair.gardenName,
+    anniversary: pair.anniversary,
+    flowers: pair.flowers
+  };
+}
 function memberIndex(req, pair) {
   const index = Number(req.body?.memberIndex);
   return Number.isInteger(index) && index >= 0 && index < pair.names.length ? index : -1;
@@ -39,7 +48,14 @@ function memberIndex(req, pair) {
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.post('/api/pair/create', (req, res) => {
   const code = makeCode();
-  pairs.set(code, { code, names: [cleanName(req.body?.name)], gardenName: '', anniversary: '', flowers: [], expiresAt: Date.now() + PAIR_TTL_MS });
+  pairs.set(code, {
+    code,
+    names: [cleanName(req.body?.name)],
+    gardenName: '',
+    anniversary: '',
+    flowers: [],
+    expiresAt: Date.now() + PAIR_TTL_MS
+  });
   res.json({ ok: true, code, expiresInSeconds: PAIR_TTL_MS / 1000 });
 });
 app.post('/api/pair/join', (req, res) => {
@@ -89,7 +105,7 @@ app.post('/api/pair/:code/flowers', (req, res) => {
   const flower = String(req.body?.flower || '');
   if (!allowedFlowers.has(flower)) return res.status(400).json({ ok: false, message: '꽃을 다시 골라주세요.' });
   const senderIndex = memberIndex(req, pair);
-  const entry = {
+  pair.flowers.push({
     flower,
     title: String(req.body?.title || '').trim().slice(0, 60) || `${flower} 꽃편지`,
     recipient: String(req.body?.recipient || '').trim().slice(0, 30),
@@ -97,8 +113,7 @@ app.post('/api/pair/:code/flowers', (req, res) => {
     sender: senderIndex >= 0 ? pair.names[senderIndex] : '우리',
     senderIndex,
     createdAt: Date.now()
-  };
-  pair.flowers.push(entry);
+  });
   res.json({ ok: true, ...pairView(pair) });
 });
 app.delete('/api/pair/:code', (req, res) => {
@@ -117,21 +132,15 @@ const persistenceScript = `
     const method = (init.method || (typeof input !== 'string' && input.method) || 'GET').toUpperCase();
     const url = typeof input === 'string' ? input : input.url;
     const response = await nativeFetch(input, init);
-    if (method === 'DELETE' && /\/api\/pair\//.test(url) && response.ok) {
-      localStorage.removeItem(storageKey);
-    }
-    if ((method === 'POST') && /\/api\/pair\/(create|join)$/.test(url) && response.ok) {
+    if (method === 'DELETE' && /\/api\/pair\//.test(url) && response.ok) localStorage.removeItem(storageKey);
+    if (method === 'POST' && /\/api\/pair\/(create|join)$/.test(url) && response.ok) {
       try {
         const data = await response.clone().json();
-        if (data.code) {
-          const memberIndex = /\/api\/pair\/join$/.test(url) ? 1 : 0;
-          localStorage.setItem(storageKey, JSON.stringify({ code: data.code, memberIndex }));
-        }
+        if (data.code) localStorage.setItem(storageKey, JSON.stringify({ code: data.code, memberIndex: /\/api\/pair\/join$/.test(url) ? 1 : 0 }));
       } catch {}
     }
     return response;
   };
-
   async function restorePair() {
     let saved;
     try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch { localStorage.removeItem(storageKey); }
@@ -142,11 +151,8 @@ const persistenceScript = `
       memberIndex = typeof saved.memberIndex === 'number' ? saved.memberIndex : 0;
       if (pair.paired) showConnectedHome(pair);
       else { showScreen('pair'); setStatus('create-status', '연결 코드를 다시 확인하고 있어요…'); startPairPolling(saved.code); }
-    } catch {
-      localStorage.removeItem(storageKey);
-    }
+    } catch { localStorage.removeItem(storageKey); }
   }
-
   window.addEventListener('load', restorePair);
 })();
 </script>`;
@@ -155,6 +161,7 @@ app.get('*', async (_req, res, next) => {
   try {
     let html = await fs.readFile(path.join(__dirname, 'index.html'), 'utf8');
     html = html.replace('아직 편지가 없어요. 첫 꽃편지로 우리만의 이야기를 시작해보세요 💌', '아직 받은 꽃이 없어요');
+    html = html.replace('</head>', '  <link rel="stylesheet" href="/fairytale-garden.css">\n</head>');
     html = html.replace('</body>', `${persistenceScript}</body>`);
     res.type('html').send(html);
   } catch (error) { next(error); }
